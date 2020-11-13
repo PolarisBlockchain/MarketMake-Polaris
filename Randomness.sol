@@ -22,7 +22,7 @@ contract RandomNumberConsumer is VRFConsumerBase {
      * Key Hash: 0xced103054e349b8dfb51352f0f8fa9b5d20dde3d06f9f43cb2b85bc64b238205
      */
     constructor(address _governance) 
-        // TODO how does this work?? 
+        // TODO how does this work??  ANS: vrf coordinator add.  hashkey. Link cost are all fixed value  https://docs.chain.link/docs/vrf-contracts  
         VRFConsumerBase(
             0xf720CF1B963e0e7bE9F58fd471EFa67e7bF00cfb, // VRF Coordinator  
             0x20fE562d797A42Dcb3399062AE9546cd06f63280  // LINK Token       
@@ -30,7 +30,7 @@ contract RandomNumberConsumer is VRFConsumerBase {
             //if not, how can we call an oracle node on conflux?
         ) public
     {
-        keyHash = 0xced103054e349b8dfb51352f0f8fa9b5d20dde3d06f9f43cb2b85bc64b238205; // TODO what's keyHash, how to use it, where to get it?
+        keyHash = 0xced103054e349b8dfb51352f0f8fa9b5d20dde3d06f9f43cb2b85bc64b238205; // TODO what's keyHash, how to use it, where to get it?  ANS: vrf coordinator add.  hashkey. Link cost are all fixed value  https://docs.chain.link/docs/vrf-contracts
         fee = 0.1 * 10 ** 18; // 0.1 LINK 
         governance = governance_interface(_governance);
     }
@@ -48,7 +48,7 @@ contract RandomNumberConsumer is VRFConsumerBase {
     /**
      * Callback function used by VRF Coordinator
      */
-    function fulfillRandomness(bytes32 requestId, uint256 randomness) external override { // TODO what's bytes32? array and string in frontend javascript
+    function fulfillRandomness(bytes32 requestId, uint256 randomness) external override { // TODO what's bytes32? array and string in frontend javascript ANS: https://ethereum.stackexchange.com/questions/11556/use-string-type-or-bytes32
         require(msg.sender == vrfCoordinator, "Fulillment only permitted by Coordinator");
         most_recent_random = randomness;
         uint lotteryId = requestIds[requestId];

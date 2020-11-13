@@ -12,7 +12,7 @@ contract Lottery is ChainlinkClient {
     // .01 ETH
     uint256 public MINIMUM = 1000000000000000;
     // 0.1 LINK
-    uint256 public ORACLE_PAYMENT = 100000000000000000; //TODO how do we know what happen to the remaining?
+    uint256 public ORACLE_PAYMENT = 100000000000000000; //TODO how do we know what happen to the remaining? ANS: vrf coordinator add.  hashkey. Link cost are all fixed value  https://docs.chain.link/docs/vrf-contracts 
     // Alarm stuff
     address CHAINLINK_ALARM_ORACLE = 0xc99B3D447826532722E41bc36e644ba3479E4365;
     bytes32 CHAINLINK_ALARM_JOB_ID = "2ebb1c1a4b1e4229adac24ee0b5f784f"; // TODO what's job id? and how to get it
@@ -26,7 +26,7 @@ contract Lottery is ChainlinkClient {
     }
 
     function enter() public payable {
-        assert(msg.value == MINIMUM); /// TODO waht's is assert vs. require?
+        assert(msg.value == MINIMUM); /// TODO waht's is assert vs. require? why == MINIMUM here? ANS: if(msg.value != MINIMUM) { revert(); } The assert function should only be used to test for internal errors, and to check invariants. The require function should be used to ensure valid conditions, such as inputs, or contract state variables are met, or to validate return values from calls to external contracts.
         assert(lottery_state == LOTTERY_STATE.OPEN);
         players.push(msg.sender);
     } 
@@ -41,7 +41,7 @@ contract Lottery is ChainlinkClient {
   
   function fulfill_alarm(bytes32 _requestId)
     public
-    recordChainlinkFulfillment(_requestId) // TODO how to write callback functions in solidity?
+    recordChainlinkFulfillment(_requestId) // TODO how to write callback functions in solidity? ANS: recordChainlinkFulfillment is modifier. Solidity finds the _; in the recordChainlinkFulfillment() modifier and executes fulfill_alarm() right there. https://medium.com/coinmonks/the-curious-case-of-in-solidity-16d9eb4440f1
       {
         require(lottery_state == LOTTERY_STATE.OPEN, "The lottery hasn't even started!");
         // add a require here so that only the oracle contract can
