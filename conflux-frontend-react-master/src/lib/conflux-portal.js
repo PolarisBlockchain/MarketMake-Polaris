@@ -26,9 +26,9 @@ class ConfluxPortal {
         method: 'cfx_sendTransaction',
         params: [params],
         from: params.from,
-        gasPrice: '0x09184e72a000', // customizable by user during ConfluxPortal confirmation.
-        gas: '0x2710',  // customizable by user during ConfluxPortal confirmation.
-        value: '0x00',
+        // gasPrice: params.gasPrice, // customizable by user during ConfluxPortal confirmation.
+        // gas: params.gas,  // customizable by user during ConfluxPortal confirmation.
+        // value: params.value,
       }, (err, data) => {
         if (err) {
           reject(err)

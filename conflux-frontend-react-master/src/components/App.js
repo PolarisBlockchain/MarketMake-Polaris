@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ContractCoin, ContractSponsorWhitelistControl } from '../lib/conflux'
+import { ContractLottery } from '../lib/conflux'
 
 import ConfluxNetwork from './ConfluxNetwork'
 import ConfluxPortal from './ConfluxPortal'
@@ -20,13 +20,11 @@ export default function App () {
       </div>
 
       <div className="row">
+       
         <div className="col-md-6 mb-3">
-          <ConfluxContract {...ContractCoin} />
+          <ConfluxContract {...ContractLottery} />
         </div>
 
-        <div className="col-md-6 mb-3">
-          <ConfluxContract {...ContractSponsorWhitelistControl} />
-        </div>
       </div>
     </div>
   )

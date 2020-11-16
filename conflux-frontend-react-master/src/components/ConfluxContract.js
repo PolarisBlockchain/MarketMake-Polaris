@@ -190,7 +190,11 @@ export default class ConfluxContract extends PureComponent {
         const result = await confluxPortal.sendTransaction({
           from: confluxPortal.getAccount(),
           to: called.to,
-          data: called.data,
+          data: called.data, 
+          value: '0x8AC7230489E80000', // 10CFX
+          gasPrice: '0x64', // 100 drips
+          gas: '0xF4240',  // 1,000,000 drips
+          storageLimit: '0x400', //1240
         })
         this.setState({ loading: false, result: `Transaction pushed with hash: ${result.result}`, error: '' })
       } catch (err) {

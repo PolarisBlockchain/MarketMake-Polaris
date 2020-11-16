@@ -1,7 +1,6 @@
 import { Conflux } from 'js-conflux-sdk'
 
-import abiCoin from './abi/Coin.json'
-import abiSponsorWhitelistControl from './abi/SponsorWhitelistControl.json'
+import abiLottery from './abi/Lottery.json'
 
 const conflux = new Conflux({
   url: process.env.REACT_APP_CONFLUX_NODE_RPC,
@@ -10,21 +9,13 @@ const conflux = new Conflux({
   logger: console,
 })
 
-export const ContractCoin = {
-  name: 'Coin',
-  abi: abiCoin,
-  contract: conflux.Contract({
-    abi: abiCoin,
-    address: process.env.REACT_APP_CONFLUX_COIN_ADDRESS,
-  }),
-}
 
-export const ContractSponsorWhitelistControl = {
-  name: 'SponsorWhitelistControl',
-  abi: abiSponsorWhitelistControl,
+export const ContractLottery = {
+  name: 'Lottery',
+  abi: abiLottery,
   contract: conflux.Contract({
-    abi: abiSponsorWhitelistControl,
-    address: '0x0888000000000000000000000000000000000001',
+    abi: abiLottery,
+    address: '0x81ab7d95df13bcd9470b8abad327ed0289278a3f',
   }),
 }
 
