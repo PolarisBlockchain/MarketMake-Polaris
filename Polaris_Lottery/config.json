@@ -1,8 +1,4 @@
 {
-  "main": "./contracts/Coin.sol",
-  "deploy": "./build/contracts/Lottery.json",
-  "compilers": {
-    "cfxtruffle": "0.0.8",
-    "solc": "default"
-  }
+  "main": "./contracts/Lottery.sol",
+  "deploy": "./build/contracts/Lottery.json"
 }
