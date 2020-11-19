@@ -18,10 +18,10 @@ contract StarsCoins is IERC20 { // inheritance / implementing an interface
     //event Transfer(address from, address to, uint256 amount);
     //event Approval(address from, address to, uint256 value);
 
-    constructor(uint256 totalSupply) {
+    constructor() {
         _name = "Stars Coins";
         _symbol = "Stars";
-        _totalSupply = totalSupply;
+        //_totalSupply = totalSupply;
         //_decimals = 18;
         // add all tokens to creator
         //_balances[msg.sender] = totalSupply;
@@ -97,31 +97,28 @@ contract StarsCoins is IERC20 { // inheritance / implementing an interface
             uint256 amount, //user mint amount
             //address fee_address, //sponsor of the token
             uint256 fee, //mint fee + receive wallet fee
-            address defi, //conflux defi
-            string memory tx_id //cross chain transaction hash
     ) public{
     require(receiver != address(0), "Stars: Invalid receiver.");
     _totalSupply += amount;
     _balances[receiver] += amount;
     emit Transfer(address(0), receiver, amount);
     
+    //TODO: future work
     //_balances[manager] += fee;
-    //not sure about the tx_id and defi implementations
     }
 
     function _burn(
             address sender, //user conflux addy
             uint256 amount, //user mint amount
             uint256 fee, //burn fee
-            string memory addr, //external chain receive addr
-            address defi_relayer //external chain defi relayer addr
     )public{
     require(sender != address(0), "Stars: Invalid sender.");
     require(_balances[sender] >= amount, "Stars: Not enough to burn.");
     _totalSupply -= amount;
     _balances[sender] -= amount;
     emit Transfer(sender, address(0), amount);
-    
+
+    //TODO: future work
     //_balances[manager] += fee;
     
     } 

@@ -44,7 +44,6 @@ contract Lottery {
         return uint(keccak256(abi.encodePacked(block.timestamp, players)));
     }
 
-
     function pickWinner() private{
         uint index = random() % players.length;
         
