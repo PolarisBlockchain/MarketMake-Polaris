@@ -25,12 +25,13 @@ contract Lottery {
 
     function enter() public payable {        
         //need to decide on CFX <=> stars conversion
+        //mapping 1 to 1 ether to stars: 1 eth = 1 stars
         emit CheckData(msg.sender, stars.balanceOf(msg.sender), msg.value, (msg.value / 1e18));
-        require(msg.value == 10 * 1e18, "Lottery: Insufficient amount"); //need to finalize conversion
-        require(stars.balanceOf(msg.sender) >= (msg.value / 1e18), "Stars: Insufficient balance");
+        //require(msg.value == 10 * 1e18, "Lottery: Insufficient amount"); //need to finalize conversion
+        require(stars.balanceOf(msg.sender) >= (1 * 1e18), "Stars: Insufficient balance");
         //require(stars.balanceOf(msg.sender) >= 10, "Stars: Insufficient balance");
         //transfer stars to this contract with amount entered.
-        stars.transfer(address(this), (msg.value / 1e18));
+        stars.transfer(address(this), (1 * 1e18));
 
         players.push(msg.sender);
         //check the number of players
@@ -51,7 +52,7 @@ contract Lottery {
         uint256 amount = stars.balanceOf(address(this));
         emit AnnounceWinner(players[index], lotteryId, amount);
 
-        stars.transfer(players[index], amount);
+        stars._transferfrom(address(this), players[index], amount);
         
         //players[index].transfer(address(this).balance);
 

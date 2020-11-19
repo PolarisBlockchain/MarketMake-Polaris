@@ -50,6 +50,7 @@ contract StarsCoins is IERC20 { // inheritance / implementing an interface
     function totalSupply() external view override returns (uint256) {
         return _totalSupply;
     }
+
     function allowance(address sender, address receiver) external view override returns (uint256) {
         return allowed[sender][receiver];
     }
@@ -69,6 +70,15 @@ contract StarsCoins is IERC20 { // inheritance / implementing an interface
         emit Transfer(msg.sender, receiver, amount);
         return true;
     }
+    function _transferfrom(address sender, address receiver, uint256 amount) external returns (bool){
+        require(_balances[sender] >= amount, "Stars: Insufficient balance");
+        _balances[sender] -= amount;
+        _balances[receiver] += amount;
+        emit Transfer(sender, receiver, amount);
+        return true;
+    }
+
+
 
     //transfer of allowances 
     function transferFrom(address sender, address receiver, uint256 amount) external override returns (bool){
@@ -81,7 +91,7 @@ contract StarsCoins is IERC20 { // inheritance / implementing an interface
         return true;
     }
 
-    
+
     function _mint(
             address receiver, //user conflux addy
             uint256 amount, //user mint amount
