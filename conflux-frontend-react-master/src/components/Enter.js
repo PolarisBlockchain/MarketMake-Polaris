@@ -105,39 +105,46 @@ class ContractMethods extends PureComponent {
 
     return (
       <React.Fragment>
-        <div className="dropdown">
-          <button className="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
-            {buttonText}
-          </button>
-          <div className="dropdown-menu">
+        <div >
+        
+          <div>
+            
             <h6 className="dropdown-header">READ</h6>
             {abiTable.function && abiTable.function.filter(method => method.stateMutability === 'view').map(method => (
-              <button
-                key={`function-${method.name}`}
-                className="dropdown-item"
-                onClick={() => this.onSelect(method)}
-              >
-                {method.name}
-              </button>
+              
+                <button
+                    key={`function-${method.name}`}
+                    onClick={() => this.onSelect(method)}
+                    className="btn btn-primary mt-3"
+                    style={{margin: 15}}
+                >
+                    {method.name}
+                </button>
+
             ))}
+
             <div className="dropdown-divider"></div>
             <h6 className="dropdown-header">WRITE</h6>
             {abiTable.function && abiTable.function.filter(method => method.stateMutability !== 'view').map(method => (
               <button
                 key={`function-${method.name}`}
-                className="dropdown-item"
                 onClick={() => this.onSelect(method)}
+                className="btn btn-primary mt-3"
+                style={{margin: 15}}
               >
                 {method.name}
               </button>
             ))}
+
+
             <div className="dropdown-divider"></div>
             <h6 className="dropdown-header">EVENT</h6>
             {abiTable.event && abiTable.event.map(event => (
               <button
                 key={`event-${event.name}`}
-                className="dropdown-item"
                 onClick={() => this.onSelect(event)}
+                className="btn btn-primary mt-3"
+                style={{margin: 15}}
               >
                 {event.name}
               </button>
@@ -150,7 +157,7 @@ class ContractMethods extends PureComponent {
   }
 }
 
-export default class ConfluxContract extends PureComponent {
+export default class Buttons extends PureComponent {
   state = {
     loading: false,
     result: '',
@@ -241,8 +248,6 @@ export default class ConfluxContract extends PureComponent {
     return (
       <div className="card">
         <div className="card-body">
-          <h5 className="card-title">Contract <code>{name}</code></h5>
-          <p className="card-text">Address: <code>{contract.address}</code></p>
           <ContractMethods
             abiTable={abiTable}
             onSubmit={this.onSubmit}
