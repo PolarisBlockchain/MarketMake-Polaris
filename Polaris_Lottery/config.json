@@ -1,4 +1,4 @@
 {
   "main": "./contracts/Lottery.sol",
-  "deploy": "./build/contracts/Lottery.json"
+  "deploy": "./build/contracts/StarsCoins.json"
 }

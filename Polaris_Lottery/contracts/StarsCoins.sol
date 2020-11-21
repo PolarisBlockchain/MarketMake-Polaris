@@ -5,9 +5,9 @@ pragma solidity ^0.7.1;
 import "./IERC20.sol";
 
 contract StarsCoins is IERC20 { // inheritance / implementing an interface
-    string _name;
-    string _symbol; // like CFX
-    uint256 _totalSupply;
+    string public _name = "Stars Coins" ;
+    string public _symbol = "Stars"; // like CFX
+    uint256 public _totalSupply;
     uint8 _decimals;
     address public manager; //for collecting fees?- TBD
 
@@ -19,13 +19,6 @@ contract StarsCoins is IERC20 { // inheritance / implementing an interface
     //event Approval(address from, address to, uint256 value);
 
     constructor() {
-        _name = "Stars Coins";
-        _symbol = "Stars";
-        //_totalSupply = totalSupply;
-        //_decimals = 18;
-        // add all tokens to creator
-        //_balances[msg.sender] = totalSupply;
-
         manager = msg.sender;
     }
 
@@ -70,15 +63,6 @@ contract StarsCoins is IERC20 { // inheritance / implementing an interface
         emit Transfer(msg.sender, receiver, amount);
         return true;
     }
-    function _transferfrom(address sender, address receiver, uint256 amount) external returns (bool){
-        require(_balances[sender] >= amount, "Stars: Insufficient balance");
-        _balances[sender] -= amount;
-        _balances[receiver] += amount;
-        emit Transfer(sender, receiver, amount);
-        return true;
-    }
-
-
 
     //transfer of allowances 
     function transferFrom(address sender, address receiver, uint256 amount) external override returns (bool){
@@ -91,12 +75,19 @@ contract StarsCoins is IERC20 { // inheritance / implementing an interface
         return true;
     }
 
+    function _fromTransfer(address sender, address receiver, uint256 amount) public returns (bool){
+        require(_balances[sender] >= amount, "Stars: Insufficient balance");
+        _balances[sender] -= amount;
+        _balances[receiver] += amount;
+        emit Transfer(sender, receiver, amount);
+        return true;
+    }
 
     function _mint(
             address receiver, //user conflux addy
             uint256 amount, //user mint amount
             //address fee_address, //sponsor of the token
-            uint256 fee, //mint fee + receive wallet fee
+            uint256 fee //mint fee + receive wallet fee
     ) public{
     require(receiver != address(0), "Stars: Invalid receiver.");
     _totalSupply += amount;
@@ -110,7 +101,7 @@ contract StarsCoins is IERC20 { // inheritance / implementing an interface
     function _burn(
             address sender, //user conflux addy
             uint256 amount, //user mint amount
-            uint256 fee, //burn fee
+            uint256 fee //burn fee
     )public{
     require(sender != address(0), "Stars: Invalid sender.");
     require(_balances[sender] >= amount, "Stars: Not enough to burn.");

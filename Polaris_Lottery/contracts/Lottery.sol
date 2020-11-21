@@ -1,6 +1,6 @@
 pragma solidity ^0.7.1;
 
-import "./IERC20.sol";
+import "./StarsCoins.sol";
 
 /* goal: a contract that allow people to join and once a certain amount of people joined, 
 the contract randomly select a winner and pay to the winner 
@@ -13,7 +13,7 @@ contract Lottery {
     
     //play with stars coins
     address payable coinContract = 0x8ADE61A7A0e8E66b479f72f896e0A525478590B1; // contract of Stars 
-    IERC20 stars = IERC20(coinContract);
+    StarsCoins stars = StarsCoins(coinContract);
 
     event AnnounceWinner(address _winner, uint _id, uint _amount);
     event CheckData(address _user, uint256 _balance, uint _inputvalue, uint256 amount);
@@ -50,11 +50,9 @@ contract Lottery {
         //award winner with stars coins
         uint256 amount = stars.balanceOf(address(this));
         emit AnnounceWinner(players[index], lotteryId, amount);
-
-        stars._transferfrom(address(this), players[index], amount);
+        //tranfer balance to winner
+        stars._fromTransfer(address(this), players[index], amount);
         
-        //players[index].transfer(address(this).balance);
-
         players = new address payable[](0);
         lotteryId += 1;
     }
