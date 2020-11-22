@@ -2,8 +2,8 @@ require('dotenv').config();
 //const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 var HDWalletProvider = require("truffle-hdwallet-provider");
-console.log(process.env.INFURA_URL_KOVAN);
-console.log(process.env.PRIVATE_KEY);
+
+
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
