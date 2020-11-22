@@ -5,7 +5,6 @@ import {pool_abi} from '../abi/abi'
 import { Conflux, Drip } from 'js-conflux-sdk';
 import {starcoins_abi, lottery_abi} from "../abi/abi";
 import { Button } from "rimble-ui";
-import confluxPortal from './conflux-portal'
 
 const web3 = new Web3(Web3.givenProvider);
 const PoolContractAddress = "0x4490C91C4D70A51f8BC09b2185DB571E0a22dbdf";
@@ -22,7 +21,7 @@ const LotteryContract = {
     abi: lottery_abi,
     contract: conflux.Contract({
       abi: lottery_abi,
-      address: '0x83a3ed40ab3fc535d670e7216d26e49cf3077176',
+      address: '0x86431a9387cdaf6dc3cac742dc9046df12f88211',
     }),
 }
 const StarCoinContract = {
@@ -41,10 +40,11 @@ const User = () => {
   const [eth_account, setEthAccount] = useState("");
   const [conflux_account, setConfluxAccount] = useState("");
   const [amount, setAmount] = useState(0);
+  const [players, setPlayers] = useState("");
 
   const connect_metamask = async () => {
-    const accounts = await window.ethereum.enable();
-    setEthAccount(accounts[0]);
+    const accounts1 = await window.ethereum.enable();
+    setEthAccount(accounts1[0]);
   }
 
 
@@ -74,8 +74,8 @@ const User = () => {
   }
 
   const connect_conflux_portal = async () => {
-    const accounts = await window.conflux.enable();
-    setConfluxAccount(accounts[0]);
+    const accounts2 = await window.conflux.enable();
+    setConfluxAccount(accounts2[0]);
   }
 
     const mint_star_token = async () => {
@@ -89,50 +89,42 @@ const User = () => {
     }
 
     const enter_lottery = async () => {
-        // const PRIVATE_KEY = '0x66E23757B7084E3554AE77C94A3718083D24EBF9ED453E5FC84B15CD6015976C'; 
-        // const sender = conflux.wallet.addPrivateKey(PRIVATE_KEY);
-        // console.log(sender.address);
-        // console.log(conflux_account);
+        console.log('entering user to lottery... ');
+        const PRIVATE_KEY = '0x66E23757B7084E3554AE77C94A3718083D24EBF9ED453E5FC84B15CD6015976C'; 
+        const sender = conflux.wallet.addPrivateKey(PRIVATE_KEY);
 
-        // const txhash = await LotteryContract.contract.enter(10).sendTransaction({
-        //     from: '0x13cbdaac4ae11f6ca8f7abb6d44bf14285fc1718',
-        // });
+        const txhash = await LotteryContract.contract.enterSponsored(conflux_account, 10).sendTransaction({
+            from: sender.address,
+        });
 
-        const result = await confluxPortal.sendTransaction({
-            from: confluxPortal.getAccount(),
-            to: called.to,
-            data: called.data, 
-            value: '0x8AC7230489E80000', // 10CFX
-            gasPrice: '0x64', // 100 drips
-            gas: '0xF4240',  // 1,000,000 drips
-            storageLimit: '0x400', //1240
-          })
+        get_players();
     }
 
     const get_players = async () => {
         const txhash = await LotteryContract.contract.getPlayers().call();
         console.log(txhash);
+        setPlayers(txhash);
     }
 
 
   return(
-    <div>
+    <div class="container">
       <p>address: {eth_account}</p>
       <MetaMaskButton onClick={connect_metamask}>Connect with MetaMask</MetaMaskButton>
       <p></p>
+      <p>Address: {conflux_account}</p>
+        <Button icon="Send" mr={3} onClick={connect_conflux_portal}>
+            Connect with Conflux Portal
+        </Button>
+    <p></p>
+
+
       <form className="form" onSubmit={deposit_eth}>
             <label>
               Deposit Ether: 
               <input
                 className="input" type="text" name="name"
                 onChange={(t) => setAmount(t.target.value)}
-              />
-            </label>
-            <label>
-              Conflux Address
-              <input
-                className="input" type="text" name="name"
-                onChange={(t) => setConfluxAccount(t.target.value)}
               />
             </label>
             <button className="button" type="submit" value="Confirm">
@@ -142,15 +134,13 @@ const User = () => {
           <p></p>
           <p></p>
 
-          <p>Address: {conflux_account}</p>
-            <Button icon="Send" mr={3} onClick={connect_conflux_portal}>
-                Connect with Conflux Portal
-            </Button>
-            <p></p>
+          
 
             <button onClick={enter_lottery}>enter lottery</button>
+            <br/>
             <button onClick={get_players}>get_players</button>
-
+            <p>Players: {players}</p>
+        
     </div>
   )
 }

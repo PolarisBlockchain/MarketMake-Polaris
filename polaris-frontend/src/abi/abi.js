@@ -432,10 +432,21 @@ export const lottery_abi = [
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "enter1",
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "enterSponsored",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
