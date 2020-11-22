@@ -12,11 +12,11 @@ contract Lottery {
     uint lotteryId;
     
     //play with stars coins
-    address payable coinContract = 0x8ADE61A7A0e8E66b479f72f896e0A525478590B1; // contract of Stars 
+    address payable coinContract = 0x8532d999176d2f5Ad5fc0d4D2981f53e62Ecf6B1; // contract of Stars 
     StarsCoins stars = StarsCoins(coinContract);
 
     event AnnounceWinner(address _winner, uint _id, uint _amount);
-    //event CheckData(address _user, uint256 _balance, uint _inputvalue, uint256 amount);
+    //event CheckData(address _user, uint256 _balance, uint256 amount);
 
     constructor(){
         manager = msg.sender;
@@ -29,13 +29,15 @@ contract Lottery {
         require(stars.balanceOf(msg.sender) >= amount, "Stars: Insufficient balance");
 
         //transfer stars to this contract with amount entered.
-        stars.transfer(address(this), amount);
+        stars._fromTransfer(msg.sender, address(this), amount);
 
         players.push(msg.sender);
         //check the number of players
         if(players.length == 5){
             pickWinner();
         }
+
+        //emit CheckData(msg.sender, stars.balanceOf(msg.sender), amount);
     }
 
     function random() private view returns (uint) {
