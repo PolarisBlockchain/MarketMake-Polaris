@@ -45,7 +45,6 @@ contract Pool {
 
     constructor() public {
         manager = msg.sender;
-        
     }
 
     function enter(address conflux_add) public payable {

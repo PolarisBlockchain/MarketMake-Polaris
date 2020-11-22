@@ -5,7 +5,7 @@ import {pool_abi} from '../abi/abi'
 
 const web3 = new Web3(Web3.givenProvider);
 
-const PoolContractAddress = "0xCC3347CcF9108A7D9956C62F844845B1057b08C6";
+const PoolContractAddress = "0x5A1b11d630805368F712230312B44192C917Da71";
 const PoolContract = new web3.eth.Contract(pool_abi, PoolContractAddress);
 
 
@@ -28,7 +28,6 @@ const EthereumManagerSide = () => {
     
     const post = await PoolContract.methods.deposit_aave(input).send(
         {   from: account,
-
         }, 
         function (err, res) {
             if (err) {
