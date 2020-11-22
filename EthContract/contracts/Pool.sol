@@ -70,6 +70,7 @@ contract Pool {
         // Approve LendingPool contract to move your DAI
         //IERC20(ethAddress).approve(provider.getLendingPoolCore(), amount);
         //IERC20(ethAddress).approve(ILendingPoolAddressesProvider(AaveLendingPoolAddressProviderAddress).getLendingPoolCore(), amount);
+        //IERC20(ethAddress).approve(provider.getLendingPoolCore(), amount);
         IERC20(ethAddress).approve(provider.getLendingPoolCore(), amount);
         //lendingPool.deposit(ethAddress, amount, 0);
         lendingPool.deposit.value(amount)(ethAddress, amount, 0);

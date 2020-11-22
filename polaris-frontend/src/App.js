@@ -2,6 +2,9 @@ import React, {useState, useEffect} from 'react';
 import ConfluxSide from './components/Conflux'
 import EthereumSide from './components/Ethereum'
 import EthereumManagerSide from './components/Ethereum_Manager'
+import User from './components/User'
+import ConfluxPortal from './components/ConfluxPortal'
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,8 +23,9 @@ const App = () => {
           <EthereumManagerSide />
         </Route>
         <Route path="/">
-          <EthereumSide />
-          <ConfluxSide />
+          <h2>Hello user!</h2>
+          <User />
+          <ConfluxPortal />
         </Route>
       </Switch>
     </div>
