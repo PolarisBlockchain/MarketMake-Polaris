@@ -40,7 +40,7 @@ export default function App () {
           <div className="col-md-10 mb-3">
             <Buttons {...ContractLottery} />
           </div>
-          <MetaMaskButton onClick={handleMetaMask} >Connect with MetaMask</MetaMaskButton>
+          {/* <MetaMaskButton onClick={handleMetaMask} >Connect with MetaMask</MetaMaskButton> */}
         </div>
       </div>
     </div>
