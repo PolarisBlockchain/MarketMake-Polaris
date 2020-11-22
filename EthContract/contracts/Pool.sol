@@ -30,10 +30,12 @@ contract Pool {
     // Retrieve LendingPool address
     //LendingPoolAddressesProvider provider = LendingPoolAddressesProvider(address(0x506B0B2CF20FAA8f38a4E2B524EE43e1f4458Cc5)); // Kovan address, for other addresses: https://docs.aave.com/developers/developing-on-aave/deployed-contract-instances
     //LendingPool lendingPool = LendingPool(provider.getLendingPool());
-    ILendingPool lendingPool = ILendingPool(
-            ILendingPoolAddressesProvider(AaveLendingPoolAddressProviderAddress)
-                .getLendingPool()
-    );
+    //ILendingPool lendingPool = ILendingPool(
+    //        ILendingPoolAddressesProvider(AaveLendingPoolAddressProviderAddress)
+    //            .getLendingPool()
+    //);
+    ILendingPoolAddressesProvider provider = ILendingPoolAddressesProvider(address(0x506B0B2CF20FAA8f38a4E2B524EE43e1f4458Cc5));
+    ILendingPool lendingPool = ILendingPool(provider.getLendingPool());
 
     address ethAddress = address(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE); // Kovan ETH address
     
@@ -68,7 +70,8 @@ contract Pool {
         require(amount <= address(this).balance);
         // Approve LendingPool contract to move your DAI
         //IERC20(ethAddress).approve(provider.getLendingPoolCore(), amount);
-        IERC20(ethAddress).approve(ILendingPoolAddressesProvider(AaveLendingPoolAddressProviderAddress).getLendingPoolCore(), amount);
+        //IERC20(ethAddress).approve(ILendingPoolAddressesProvider(AaveLendingPoolAddressProviderAddress).getLendingPoolCore(), amount);
+        IERC20(ethAddress).approve(provider.getLendingPoolCore(), amount);
         lendingPool.deposit(ethAddress, amount, 0);
     }
 
@@ -77,6 +80,7 @@ contract Pool {
     function redeem_aave(uint amount) public {
         //https://docs.aave.com/developers/developing-on-aave/the-protocol/atokens
         require(msg.sender == manager);
+        require(amount <= aTokenInstance.balanceOf(address(this)));
         aTokenInstance.redeem(amount);
     }
     
