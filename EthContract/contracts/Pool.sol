@@ -75,6 +75,8 @@ contract Pool {
         lendingPool.deposit(ethAddress, amount, 0);
     }
 
+
+
     function redeem_aave(uint amount) public {
         //https://docs.aave.com/developers/developing-on-aave/the-protocol/atokens
         require(msg.sender == manager);
