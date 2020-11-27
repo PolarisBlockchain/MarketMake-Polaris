@@ -15,7 +15,7 @@ const LotteryContract = {
     abi: lottery_abi,
     contract: conflux.Contract({
       abi: lottery_abi,
-      address: '0x898b30bec044dabc45b54c336b0bd96149cac1e8',
+      address: '0x8b7c13203fd2006e3f6e3613b43ce3a7aae89dcb',
     }),
 }
 
@@ -50,7 +50,7 @@ const ConfluxSide = () => {
     }
 
     const enter_lottery = async () => {
-        const txhash = await LotteryContract.contract.enter().sendTransaction({
+        const txhash = await LotteryContract.contract.enter(10).sendTransaction({
             from: account,
         });
     }

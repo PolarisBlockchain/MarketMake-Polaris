@@ -5,7 +5,7 @@ import {pool_abi} from '../abi/abi'
 
 const web3 = new Web3(Web3.givenProvider);
 
-const PoolContractAddress = "0xCC3347CcF9108A7D9956C62F844845B1057b08C6";
+const PoolContractAddress = "0x4490C91C4D70A51f8BC09b2185DB571E0a22dbdf";
 const PoolContract = new web3.eth.Contract(pool_abi, PoolContractAddress);
 
 
