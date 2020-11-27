@@ -1,7 +1,7 @@
 pragma solidity ^0.7.1;
 
 import "./StarsCoins.sol";
-
+import "./SponsorWhitelistControl.sol";
 /* goal: a contract that allow people to join and once a certain amount of people joined, 
 the contract randomly select a winner and pay to the winner 
 */
@@ -15,6 +15,10 @@ contract Lottery {
     address payable coinContract = 0x8532d999176d2f5Ad5fc0d4D2981f53e62Ecf6B1; // contract of Stars 
     StarsCoins stars = StarsCoins(coinContract);
 
+    //Sponsorship
+    address swc_addr = 0x0888000000000000000000000000000000000001; //swc address
+    SponsorWhitelistControl swc = SponsorWhitelistControl(swc_addr);
+
     event AnnounceWinner(address _winner, uint _id, uint _amount);
     //event CheckData(address _user, uint256 _balance, uint256 amount);
 
@@ -26,7 +30,7 @@ contract Lottery {
     function enter(uint256 amount) public payable {        
         //mapping 1 to 1 ether to stars: 0.01 eth = 1 stars
         require(amount == 10, "Lottery: Incorrect number of Stars");
-        require(stars.balanceOf(msg.sender) >= amount, "Stars: Insufficient balance");
+        require(stars.balanceOf(msg.sender) >= amount, "Lottery: Insufficient balance of Stars");
 
         //transfer stars to this contract with amount entered.
         stars._fromTransfer(msg.sender, address(this), amount);
@@ -62,7 +66,15 @@ contract Lottery {
     }
 
     function getPool() public view returns(uint){
-        return address(this).balance;
+        return stars.balanceOf(address(this));
+    }
+
+    function addToWhitelist(address account) public {
+        require(msg.sender == manager, "Lottery: Only manager can access");
+        address[] memory a = new address[](1);
+        //a[0] = 0x0000000000000000000000000000000000000000; //all trans will be sponsored
+        a[0] = account; //sponsor specific user
+        swc.addPrivilege(a);
     }
 
 }
