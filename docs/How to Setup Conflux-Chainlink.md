@@ -43,6 +43,7 @@ ALLOW_ORIGINS=*
 DATABASE_TIMEOUT=0
 ETH_DISABLED=true
 FEATURE_EXTERNAL_INITIATORS=true
+ENABLE_EXPERIMENTAL_ADAPTERS=true
 CHAINLINK_DEV=true" > ~/.chainlink/.env
 ```
 
@@ -116,3 +117,11 @@ EI_CI_SECRET=72oxivjfbLiBmlt6ZtDHnPaPNW0R+XusXoNlMXVC9l1usDYO0ob5WvrlUqZuLVQQ" >
 ./external-initiator "{\"name\":\"cfx-testnet\",\"type\":\"conflux\",\"url\":\"http://test.confluxrpc.org\"}" --chainlinkurl "http://localhost:6688/"
 ```
 
+# Setup External Adapters
+
+### First you need to have npm and yarn
+
+1. Install [npm(install LTS version)](https://tecadmin.net/install-latest-nodejs-npm-on-debian/)
+
+2. Install [yarn](https://tecadmin.net/install-yarn-debian/)
+3. 
