@@ -1,9 +1,8 @@
   
 pragma solidity ^0.5.0;
 
-//import "https://github.com/mrdavey/ez-flashloan/blob/remix/contracts/aave/FlashLoanReceiverBase.sol";
-import "https://github.com/mrdavey/ez-flashloan/blob/remix/contracts/aave/ILendingPool.sol";
-import "https://github.com/mrdavey/ez-flashloan/blob/remix/contracts/aave/ILendingPoolAddressesProvider.sol";
+
+
 interface IERC20 {
     /**
      * @dev Returns the amount of tokens in existence.
@@ -75,6 +74,60 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
+contract ILendingPoolAddressesProvider {
+
+    function getLendingPool() public view returns (address);
+    function setLendingPoolImpl(address _pool) public;
+
+    function getLendingPoolCore() public view returns (address payable);
+    function setLendingPoolCoreImpl(address _lendingPoolCore) public;
+
+    function getLendingPoolConfigurator() public view returns (address);
+    function setLendingPoolConfiguratorImpl(address _configurator) public;
+
+    function getLendingPoolDataProvider() public view returns (address);
+    function setLendingPoolDataProviderImpl(address _provider) public;
+
+    function getLendingPoolParametersProvider() public view returns (address);
+    function setLendingPoolParametersProviderImpl(address _parametersProvider) public;
+
+    function getTokenDistributor() public view returns (address);
+    function setTokenDistributor(address _tokenDistributor) public;
+
+    function getFeeProvider() public view returns (address);
+    function setFeeProviderImpl(address _feeProvider) public;
+
+    function getLendingPoolLiquidationManager() public view returns (address);
+    function setLendingPoolLiquidationManager(address _manager) public;
+
+    function getLendingPoolManager() public view returns (address);
+    function setLendingPoolManager(address _lendingPoolManager) public;
+
+    function getPriceOracle() public view returns (address);
+    function setPriceOracle(address _priceOracle) public;
+
+    function getLendingRateOracle() public view returns (address);
+    function setLendingRateOracle(address _lendingRateOracle) public;
+
+}
+
+interface ILendingPool {
+  function addressesProvider () external view returns ( address );
+  function deposit ( address _reserve, uint256 _amount, uint16 _referralCode ) external payable;
+  function redeemUnderlying ( address _reserve, address _user, uint256 _amount ) external;
+  function borrow ( address _reserve, uint256 _amount, uint256 _interestRateMode, uint16 _referralCode ) external;
+  function repay ( address _reserve, uint256 _amount, address _onBehalfOf ) external payable;
+  function swapBorrowRateMode ( address _reserve ) external;
+  function rebalanceFixedBorrowRate ( address _reserve, address _user ) external;
+  function setUserUseReserveAsCollateral ( address _reserve, bool _useAsCollateral ) external;
+  function liquidationCall ( address _collateral, address _reserve, address _user, uint256 _purchaseAmount, bool _receiveAToken ) external payable;
+  function flashLoan ( address _receiver, address _reserve, uint256 _amount, bytes calldata _params ) external;
+  function getReserveConfigurationData ( address _reserve ) external view returns ( uint256 ltv, uint256 liquidationThreshold, uint256 liquidationDiscount, address interestRateStrategyAddress, bool usageAsCollateralEnabled, bool borrowingEnabled, bool fixedBorrowRateEnabled, bool isActive );
+  function getReserveData ( address _reserve ) external view returns ( uint256 totalLiquidity, uint256 availableLiquidity, uint256 totalBorrowsFixed, uint256 totalBorrowsVariable, uint256 liquidityRate, uint256 variableBorrowRate, uint256 fixedBorrowRate, uint256 averageFixedBorrowRate, uint256 utilizationRate, uint256 liquidityIndex, uint256 variableBorrowIndex, address aTokenAddress, uint40 lastUpdateTimestamp );
+  function getUserAccountData ( address _user ) external view returns ( uint256 totalLiquidityETH, uint256 totalCollateralETH, uint256 totalBorrowsETH, uint256 availableBorrowsETH, uint256 currentLiquidationThreshold, uint256 ltv, uint256 healthFactor );
+  function getUserReserveData ( address _reserve, address _user ) external view returns ( uint256 currentATokenBalance, uint256 currentUnderlyingBalance, uint256 currentBorrowBalance, uint256 principalBorrowBalance, uint256 borrowRateMode, uint256 borrowRate, uint256 liquidityRate, uint256 originationFee, uint256 variableBorrowIndex, uint256 lastUpdateTimestamp, bool usageAsCollateralEnabled );
+  function getReserves () external view;
+}
 //integrate aave:  https://soliditydeveloper.com/integrate-aave
 interface IaToken {
     function balanceOf(address _user) external view returns (uint256);
@@ -83,6 +136,7 @@ interface IaToken {
 
 
 contract PoolNew {
+    function() external payable{}
     address payable manager;
     mapping (address => uint) public players; 
     address constant AaveLendingPoolAddressProviderAddress =0x506B0B2CF20FAA8f38a4E2B524EE43e1f4458Cc5;// Kovan address, for other addresses: https://docs.aave.com/developers/developing-on-aave/deployed-contract-instances
@@ -98,16 +152,26 @@ contract PoolNew {
     ILendingPool lendingPool = ILendingPool(provider.getLendingPool());
 
     address ethAddress = address(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE); // Kovan ETH address
-    address daiAddress = address(0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa); // Kovan Dai address
+    address usdcAddress = address(0xe22da380ee6B445bb8273C81944ADEB6E8450422); // Kovan usdc address
     /// Instantiation of the aToken address
     //aToken aTokenInstance = AToken(0xD483B49F2d55D2c53D32bE6efF735cB001880F79); //aETH address on Kovan network
-    IaToken aTokenInstance = IaToken(0xD483B49F2d55D2c53D32bE6efF735cB001880F79);
+    address aethAddress = address(0xD483B49F2d55D2c53D32bE6efF735cB001880F79); 
+    IaToken aTokenInstance = IaToken(aethAddress);
+    //IaToken aTokenInstance = IaToken(0x02F626c6ccb6D2ebC071c068DC1f02Bf5693416a);
 
     constructor() public {
+        
         manager = msg.sender;
+        
+        
     }
 
-    function enter(address conflux_add) public payable {
+    //function enter(address conflux_add) public payable {
+        
+    //    players[conflux_add] = msg.value;
+    //}
+    function enter(address conflux_add) external payable {
+        //ERC20(usdcAddress).transferFrom(msg.sender,address(this), amount);
         players[conflux_add] = msg.value;
     }
 
@@ -131,19 +195,21 @@ contract PoolNew {
         //IERC20(ethAddress).approve(provider.getLendingPoolCore(), amount);
         //IERC20(ethAddress).approve(ILendingPoolAddressesProvider(AaveLendingPoolAddressProviderAddress).getLendingPoolCore(), amount);
         //IERC20(ethAddress).approve(provider.getLendingPoolCore(), amount);
-        //IERC20(ethAddress).approve(provider.getLendingPoolCore(), amount);
+        //ERC20(usdcAddress).approve(provider.getLendingPoolCore(), amount);
+        uint16 referral = 0;
+        //lendingPool.deposit(usdcAddress, amount, referral);
         //lendingPool.deposit(ethAddress, amount, 0);
         //lendingPool.deposit{ value: amount }(reserve, amount, 0);
-        lendingPool.deposit.value(amount)(ethAddress, amount, 0);
+        lendingPool.deposit.value(amount)(ethAddress, amount, referral);
     }
 
 
 
-    function redeem_aave(uint amount) public {
+    function redeem_aave(uint amount) public payable{
         //https://docs.aave.com/developers/developing-on-aave/the-protocol/atokens
         require(msg.sender == manager);
         //require(amount <= aTokenInstance.balanceOf(address(this)));
-        aTokenInstance.redeem(amount);
+        IaToken(aethAddress).redeem(amount);
     }
     
 }
