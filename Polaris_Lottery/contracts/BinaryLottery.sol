@@ -38,6 +38,7 @@ contract BinaryLottery {
     address swc_addr = 0x0888000000000000000000000000000000000001; //swc address
     SponsorWhitelistControl swc = SponsorWhitelistControl(swc_addr);
 
+    //announcements
     event AnnounceWinner(uint _winningTeam, uint _id, uint _amount);
 
     constructor(address payable _coinContract){
@@ -53,6 +54,7 @@ contract BinaryLottery {
     
     //backend call this function to start lottery
     function startLottery() private{
+        require(manager == msg.sender, "Lottery: permission denied.");
         LotteryOpen = true;
     }
     
@@ -132,6 +134,8 @@ contract BinaryLottery {
 
     //backend call to end lottery, pay back players and pick winner
     function endLottery(uint _score1, uint _score2) private{
+        require(manager == msg.sender, "Lottery: permission denied.");
+
         //close the lottery
         LotteryOpen = false;
 

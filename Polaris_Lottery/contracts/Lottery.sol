@@ -26,6 +26,7 @@ contract Lottery {
     address swc_addr = 0x0888000000000000000000000000000000000001; //swc address
     SponsorWhitelistControl swc = SponsorWhitelistControl(swc_addr);
 
+    //annoucements
     event AnnounceWinner(address _winner, uint _id, uint _amount);
 
     constructor(){     
@@ -41,6 +42,7 @@ contract Lottery {
     
     //backend call this function to start lottery
     function startLottery() private{
+        require(manager == msg.sender, "Lottery: permission denied.");
         LotteryOpen = true;
     }
 
@@ -88,6 +90,7 @@ contract Lottery {
 
     //backend call to end lottery, pay back players and pick winner
     function endLottery(uint prize) private{
+        require(manager == msg.sender, "Lottery: permission denied.");
         //close the lottery
         LotteryOpen = false;
 
