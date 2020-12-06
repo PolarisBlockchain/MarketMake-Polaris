@@ -20,6 +20,10 @@ contract LotteryFactory {
     address public manager;
     address[] public lotteries;
 
+    //play with stars coins
+    address payable coinContract = 0x0888000000000000000000000000000000000001;
+    StarsCoins stars = StarsCoins(coinContract);
+
     //announcements
     event newLottery(uint id, uint lottery_type);
 
@@ -29,17 +33,19 @@ contract LotteryFactory {
 
     function create(uint lottery_type) external{
         require(manager == msg.sender, "LotteryFactory: permission denied.");
+        uint id;
 
         //create lottery according to type
         if(lottery_type == 1){
-            Lottery lot = new Lottery();
+            Lottery lot = new Lottery(coinContract);
+            id = lotteries.length;
+            lotteries.push(address(lot));
         }
         if(lottery_type == 2){
-            BinaryLottery lot = new BinaryLottery();
+            BinaryLottery lot = new BinaryLottery(coinContract);
+            id = lotteries.length;
+            lotteries.push(address(lot));
         }
-
-        uint id = lotteries.length;
-        lotteries.push(address(lot));
 
         emit newLottery(id, lottery_type);
     }

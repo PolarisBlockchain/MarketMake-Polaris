@@ -11,7 +11,7 @@ pragma solidity ^0.7.1;
  **************************************************************************/
 import "./StarsCoins.sol";
 import "./SponsorWhitelistControl.sol";
-import "./Star.sol";
+
 /*
 NBA: 1 = Home Team, 2 =  Visitor Team
 ETH: 1 = True, 2 = False
@@ -23,17 +23,29 @@ contract BinaryLottery {
 
     address payable[] public players1;
     address payable[] public players2;
-    mapping(address payable => uint) public bets;
+    mapping(address => uint) public bets;
 
     uint score1;
     uint score2;
 
-    uint teamChosen;
     uint winningTeam;
 
     uint lotteryId;
     bool LotteryOpen;
-    
+
+    address payable coinContract;
+
+    constructor(address payable _coinContract){
+        coinContract = _coinContract; // contract of Stars 
+        
+        //initialize variables
+        manager = msg.sender;
+        lotteryId = 1;
+        LotteryOpen = false;
+    }
+    //play with stars coins 
+    StarsCoins stars = StarsCoins(coinContract);
+
     //Sponsorship
     address swc_addr = 0x0888000000000000000000000000000000000001; //swc address
     SponsorWhitelistControl swc = SponsorWhitelistControl(swc_addr);
@@ -41,16 +53,6 @@ contract BinaryLottery {
     //announcements
     event AnnounceWinner(uint _winningTeam, uint _id, uint _amount);
 
-    constructor(address payable _coinContract){
-        //play with stars coins
-        address payable coinContract = _coinContract; // contract of Stars 
-        StarsCoins stars = StarsCoins(coinContract);
-        
-        //initialize variables
-        manager = msg.sender;
-        lotteryId = 1;
-        LotteryOpen = false;
-    }
     
     //backend call this function to start lottery
     function startLottery() private{
@@ -59,7 +61,7 @@ contract BinaryLottery {
     }
     
     //frontend call this function to enter lottery
-    function enter(uint amount, uint teamChosen) public{
+    function enter(uint amount, uint _teamChosen) public{
         require(LotteryOpen == true, "Lottery: Lottery is not open.");
         
         //fixed bet
@@ -69,18 +71,18 @@ contract BinaryLottery {
         //transfer stars to this contract with amount entered.
         stars._fromTransfer(msg.sender, address(this), amount);
 
-        if (teamChosen == "1"){
+        if (_teamChosen == 1){
             players1.push(msg.sender);
             bets[msg.sender] = amount;
         }
 
-        if (teamChosen == "2"){
+        if (_teamChosen == 2){
             players2.push(msg.sender);
             bets[msg.sender] = amount;
         }
     }
 
-    function updateScores(uint _score1, uint _score2) public view{
+    function updateScores(uint _score1, uint _score2) public{
         score1 = _score1;
         score2 = _score2;
     }
@@ -88,25 +90,27 @@ contract BinaryLottery {
     function payWinner() private{
         //close lottery
         require(LotteryOpen == false, "Lottery: Lottery is open.");
+        address payable[] memory winners;
+        uint amount;
 
         //check winning team
         if (winningTeam == 1){
             //set winners to players1
-            address payable[]  winners = players1;
+            winners = players1;
             //calculate prize
-            uint amount = uint(players2.length * 10) / players1.length;
+            amount = uint(players2.length * 10) / players1.length;
         }
         else{
             //set winners to players2
-            address payable[]  winners = players2;
+            winners = players2;
             //calculate prize
-            uint amount = uint(players1.length * 10) / players2.length;
+            amount = uint(players1.length * 10) / players2.length;
         }
 
         //loop thru winning players to pay them
         for (uint i = 0; i < winners.length; i++){
             //tranfer prize to winners
-            stars._fromTransfer(address(this), winners[index], amount);
+            stars._fromTransfer(address(this), winners[i], amount);
         }
        
         emit AnnounceWinner(winningTeam, lotteryId, amount);
@@ -119,11 +123,11 @@ contract BinaryLottery {
 
         //loop thru players1 to reset bets
         for (uint i = 0; i < players1.length; i++){
-            bets1[players1[i]] = 0
+            bets[players1[i]] = 0;
         }
         //loop thru players2 to reset bets
         for (uint i = 0; i < players2.length; i++){
-            bets2[players2[i]] = 0
+            bets[players2[i]] = 0;
         }
         
         //reset arrays

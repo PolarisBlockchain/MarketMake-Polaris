@@ -13,7 +13,6 @@ pragma solidity ^0.7.1;
  **************************************************************************/
 import "./StarsCoins.sol";
 import "./SponsorWhitelistControl.sol";
-import "./Star.sol";
 
 contract Lottery {
     //declare required variables
@@ -22,23 +21,25 @@ contract Lottery {
     uint lotteryId;
     bool LotteryOpen;
 
-    //Sponsorship
-    address swc_addr = 0x0888000000000000000000000000000000000001; //swc address
-    SponsorWhitelistControl swc = SponsorWhitelistControl(swc_addr);
+    address payable coinContract;
 
-    //annoucements
-    event AnnounceWinner(address _winner, uint _id, uint _amount);
-
-    constructor(){     
-        //play with stars coins
-        address payable coinContract = 0x855D31D814Dce772976cc94D1f3E2b16e08fBB80; // contract of Stars 
-        StarsCoins stars = StarsCoins(coinContract);
+    constructor(address payable _coinContract){     
+        coinContract = _coinContract; // contract of Stars 
 
         //initialize variables
         manager = msg.sender;
         lotteryId = 1;
         LotteryOpen = false;
     }
+    //play with stars coins
+    StarsCoins stars = StarsCoins(coinContract);
+    
+    //Sponsorship
+    address swc_addr = 0x0888000000000000000000000000000000000001; //swc address
+    SponsorWhitelistControl swc = SponsorWhitelistControl(swc_addr);
+
+    //annoucements
+    event AnnounceWinner(address _winner, uint _id, uint _amount);
     
     //backend call this function to start lottery
     function startLottery() private{
