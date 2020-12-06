@@ -2,7 +2,21 @@
 
 Polaris - Brian
 
-# References
+# Anchors
+
+[Setup Chainlink Node](#setup-chainlink-node)
+
+[Setup an External Initiator](#setup-an-external-initiator)
+
+[Setup Solidity Smart Contract](#setup-solidity-smart-contract)
+
+[Setup External Adapters](#setup-external-adapters)
+
+[Connecting Everything](#connecting-everything)
+
+
+
+#### Main References
 
 https://www.youtube.com/watch?v=yhLEYwdO9jw
 
@@ -117,11 +131,82 @@ EI_CI_SECRET=72oxivjfbLiBmlt6ZtDHnPaPNW0R+XusXoNlMXVC9l1usDYO0ob5WvrlUqZuLVQQ" >
 ./external-initiator "{\"name\":\"cfx-testnet\",\"type\":\"conflux\",\"url\":\"http://test.confluxrpc.org\"}" --chainlinkurl "http://localhost:6688/"
 ```
 
+
+
+# Setup Solidity Smart Contract
+
+tutorials for Deploy Smart Contract Instance is [here](https://conflux-chain.github.io/conflux-doc/javascript-example/)
+
+There are four `js` files in `/contractInteraction`, These files are just here to help us interact with the smart contract, we will just need to add these codes to our frontend so that we can interact with our smart contract.
+
+```bash
+.
+├── contract # contract folder
+│   ├── abi.json # Generated from Compiling .sol
+│   ├── bytecode.json # Generated from Compiling .sol
+│   └── test_oracle.sol # where we store our contract (not necessary, just here to demo)
+├── deploy.js # used to deploy our smart contract
+├── emitEvent.js # used to emit events to our External Initiator, and to Chainlink Node...
+├── getInfo.js # getting the current status of Smart Contract
+└── setValue.js # Setting the Value of the Smart Contract
+```
+
 # Setup External Adapters
+
+#### Some of the Resources
+
+https://github.com/Conflux-Chain/js-conflux-sdk
 
 ### First you need to have npm and yarn
 
 1. Install [npm(install LTS version)](https://tecadmin.net/install-latest-nodejs-npm-on-debian/)
 
 2. Install [yarn](https://tecadmin.net/install-yarn-debian/)
-3. 
+
+
+
+# Connecting Everything
+
+In order to create the necessary connections between the various components (Conflux Network, Chainlink node, EI, EA, and NBA API), two job runs on the node need to be created. This can be done by accessing the node via the `localhost:6688` address and logging in.
+
+The first job spec is for connecting the external initiator.
+
+```json
+{
+  "initiators": [
+    {
+      "type": "external",
+      "params": {
+        "name": "cfx",
+        "body": {
+          "endpoint": "cfx-testnet",
+          "addresses": ["<Our Lottery Smart Contract Address>"]
+        }
+      }
+    }
+  ],
+  "tasks": [
+    {"type": "NBABridge"}
+  ]
+}
+```
+
+The `name` in the initiator portion is the same name as entered when using the `chainlink initiators create <NAME> <URL>` command. The `endpoint` is the same name used in the external initiator startup command. The `addresses` are the contract addresses on Conflux Network. When this job is first created, it will trigger a test payload in the EI that is sent to Conflux Network. The test payload contains a `cfx_epochNumber`, and upon successful return to the node, the EI begins polling the Conflux Network endpoint periodically (~5 seconds). When it catches an event using `cfx_getLogs`, it sends information to the `TwilioBridge` external adapter via the Chainlink node.
+
+The second job spec is for checking when NBA Score is out.
+
+```
+{
+  "initiators": [
+    {
+      "type": "cron",
+      "params": {
+        "schedule": "CRON_TZ=UTC */30 * * * * *"
+      }
+    }
+  ],
+  "tasks": [{ "type": "TwilioCheck" }, { "type": "cfxSendTx" }]
+}
+```
+
+This is achieved by using a CRON job where the Chainlink node will ask the SMS adapter to check the endpoint and any new messages are passed on to the CFX adapter to send to the chain.
