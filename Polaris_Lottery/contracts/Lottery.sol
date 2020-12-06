@@ -90,7 +90,7 @@ contract Lottery {
     }
 
     //backend call to end lottery, pay back players and pick winner
-    function endLottery(uint prize) private{
+    function endLottery(uint prize) public{
         require(manager == msg.sender, "Lottery: permission denied.");
         //close the lottery
         LotteryOpen = false;

@@ -1,6 +1,6 @@
 pragma solidity ^0.7.1;
 /**************************************************************************
- * *Program: BinaryLottery.sol
+ * *Program: LotteryFactory.sol
  * *Author: Polaris Lottery Group
  * *Version: 1.1
  * *Date: 12/02/2020
@@ -31,7 +31,7 @@ contract LotteryFactory {
         manager = msg.sender;
     }
 
-    function create(uint lottery_type) external{
+    function create(uint lottery_type) public{
         require(manager == msg.sender, "LotteryFactory: permission denied.");
         uint id;
 
@@ -46,7 +46,6 @@ contract LotteryFactory {
             id = lotteries.length;
             lotteries.push(address(lot));
         }
-
         emit newLottery(id, lottery_type);
     }
 
