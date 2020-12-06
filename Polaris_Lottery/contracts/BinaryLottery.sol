@@ -14,9 +14,8 @@ import "./SponsorWhitelistControl.sol";
 
 /*
 NBA: 1 = Home Team, 2 =  Visitor Team
-ETH: 1 = True, 2 = False
+ETH: 1 = Higher, 2 = Lower
 */
-//TODO: add pools
 
 contract BinaryLottery {
     //declare required variables

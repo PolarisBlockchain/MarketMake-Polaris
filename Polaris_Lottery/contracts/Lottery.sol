@@ -42,7 +42,7 @@ contract Lottery {
     event AnnounceWinner(address _winner, uint _id, uint _amount);
     
     //backend call this function to start lottery
-    function startLottery() private{
+    function startLottery() public{
         require(manager == msg.sender, "Lottery: permission denied.");
         LotteryOpen = true;
     }
