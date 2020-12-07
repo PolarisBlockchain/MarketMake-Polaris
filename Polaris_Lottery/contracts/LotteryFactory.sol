@@ -31,7 +31,8 @@ contract LotteryFactory {
         manager = msg.sender;
     }
 
-    function create(uint lottery_type) public{
+    //backend calls to create a lottery contract
+    function create(uint lottery_type) public returns(address){
         require(manager == msg.sender, "LotteryFactory: permission denied.");
         uint id;
 
@@ -47,6 +48,8 @@ contract LotteryFactory {
             lotteries.push(address(lot));
         }
         emit newLottery(id, lottery_type);
+
+        return lotteries[id];
     }
 
 
