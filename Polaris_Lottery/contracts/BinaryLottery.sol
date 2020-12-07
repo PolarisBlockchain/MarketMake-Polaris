@@ -14,7 +14,7 @@ import "./SponsorWhitelistControl.sol";
 
 /*
 NBA: 1 = Home Team, 2 =  Visitor Team
-ETH: 1 = True, 2 = False
+ETH: 1 = Higher, 2 = Lower
 */
 
 contract BinaryLottery {
@@ -54,7 +54,7 @@ contract BinaryLottery {
     event AnnounceWinner(uint _winningTeam, uint _id, uint _amount);
 
     
-    //backend call this function to start lottery
+    //frontend call this function to start lottery
     function startLottery() private{
         require(manager == msg.sender, "Lottery: permission denied.");
         LotteryOpen = true;

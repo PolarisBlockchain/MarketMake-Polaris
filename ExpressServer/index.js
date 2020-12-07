@@ -8,6 +8,7 @@ const port = 5001;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;
 const X_RAPIDAPI_HOST = process.env.X_RAPIDAPI_HOST;
+const BASE_URL = "/api/v1";
 const NBA_BASE_URL = "https://api-nba-v1.p.rapidapi.com/";
 const BASE_COIN_PRICE_URL = "https://api.coingecko.com/api/v3" // documentation is here: https://www.coingecko.com/api/documentations/v3
 const axios = require('axios');
@@ -19,7 +20,8 @@ const COIN_LISTS = [
 ]
 
 const NBA_URL_PATHS = {
-  seasons: "seasons/",
+  seasons: "seasons",
+  seasonYear: "games/seasonYear/"
 }
 
 function getCoinPriceAxiosConfig(coinID) {
@@ -37,7 +39,7 @@ function getCoinPriceAxiosConfig(coinID) {
 function getNBAAPIAxiosConfig(subPath) {
   var config = {
     method: 'get',
-    url: NBA_BASE_URL + subPath,
+    url: NBA_BASE_URL + subPath + '/',
     headers: { 
       'x-rapidapi-key': X_RAPIDAPI_KEY,
       'x-rapidapi-host': X_RAPIDAPI_HOST
@@ -50,7 +52,12 @@ function getNBAAPIAxiosConfig(subPath) {
 const main = () => {
   app.use(bodyParser.json());
 
-  app.get("/nba/season/list", async (req, res) => {
+  /**
+   * @api {get} /api/v1/nba/season/list List Season Years
+   * @apiName list-season-years
+   * @apiSuccess (200) {Number[]} years
+   */
+  app.get(BASE_URL + "/nba/season/list", async (_, res) => {
     let config = getNBAAPIAxiosConfig(NBA_URL_PATHS.seasons);
     axios(config)
     .then(function (response) {
@@ -62,11 +69,42 @@ const main = () => {
     });
   })
 
-  // app.post("/nba", async(req, res) => {
+  /**
+   * @api {get} /api/v1/nba/season/:year Get A Season
+   * @apiName get-a-season
+   * @apiParam {Number} year  from `list-season-years` api
+   * @apiSuccess (200) {json} Games List of Games
+   */
+  app.get(BASE_URL + "/nba/season/:year", async (req, res) => {
+    const year = req.params.year;
+    let config = getNBAAPIAxiosConfig(NBA_URL_PATHS.seasonYear+year)
+    axios(config)
+    .then(function (response) {
+      const games = response.data.api.games;
+      const output = [];
+      for (let i = 0; i < games.length; i++) {
+        const game = {
+          "gameID": games[i].gameId,
+          "startTimeUTC": games[i].startTimeUTC,
+          "vTeam": games[i].vTeam,
+          "hTeam": games[i].hTeam
+        }
+        output.push(game);
+      }
+      res.status(200).send(output);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  })
 
-  // })
-
-  app.get("/coins/list", async (req, res) => {
+  /**
+   * @api {get} /api/v1/coins/list List coins
+   * @apiName list-coins
+   * @apiParam {Boolean} less  true if you want to just get the major coins info.
+   * @apiSuccess (200) {Number[]} years
+   */
+  app.get(BASE_URL + "/coins/list", async (req, res) => {
     let isLess = req.query.less
     if (isLess) {
       var output = COIN_LISTS;
@@ -91,7 +129,13 @@ const main = () => {
     });
   })
 
-  app.get("/coins/:coinID", async (req, res) => {
+  /**
+   * @api {get} /api/v1/coins/:coinID Get Info of A Coin
+   * @apiName get-info-of-a-coin
+   * @apiParam {String} coinID  The ID of a coin, fetched from `list-coins` api.
+   * @apiSuccess (200) {Number[]} years
+   */
+  app.get(BASE_URL + "/coins/:coinID", async (req, res) => {
     const coinID = req.params.coinID;
     let config = getCoinPriceAxiosConfig(coinID);
     axios(config)
@@ -111,7 +155,9 @@ const main = () => {
     });
   })
 
-  app.post("/coins/timesup/:coinID", async (req, res) => {
+  // Input: Contract Address
+  // need to check 
+  app.post(BASE_URL + "/coins/timesup/:coinID", async (req, res) => {
     const coinID = req.params.coinID;
     let config = getCoinPriceAxiosConfig(coinID);
     axios(config)
