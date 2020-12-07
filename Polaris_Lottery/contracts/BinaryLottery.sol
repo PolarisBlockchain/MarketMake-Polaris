@@ -27,6 +27,8 @@ contract BinaryLottery {
 
     uint score1;
     uint score2;
+    uint pool1;
+    uint pool2;
 
     uint winningTeam;
 
@@ -54,10 +56,18 @@ contract BinaryLottery {
     event AnnounceWinner(uint _winningTeam, uint _id, uint _amount);
 
     
+<<<<<<< HEAD
     //frontend call this function to start lottery
     function startLottery() private{
+=======
+    //backend call this function to start lottery
+    function startLottery() public{
+        require(LotteryOpen == false, "Lottery: Lottery is open.");
+>>>>>>> 5000dbd81bf6911803ff1b9f8d585a260bedc99c
         require(manager == msg.sender, "Lottery: permission denied.");
         LotteryOpen = true;
+        pool1 = 0;
+        pool2 = 0;
     }
     
     //frontend call this function to enter lottery
@@ -65,7 +75,7 @@ contract BinaryLottery {
         require(LotteryOpen == true, "Lottery: Lottery is not open.");
         
         //fixed bet
-        require(amount == 10, "Lottery: Incorrect number of Stars");
+        //require(amount == 10, "Lottery: Incorrect number of Stars");
         require(stars.balanceOf(msg.sender) >= amount, "Lottery: Insufficient balance of Stars");
 
         //transfer stars to this contract with amount entered.
@@ -74,15 +84,18 @@ contract BinaryLottery {
         if (_teamChosen == 1){
             players1.push(msg.sender);
             bets[msg.sender] = amount;
+            pool1 = pool1 + amount;
         }
 
         if (_teamChosen == 2){
             players2.push(msg.sender);
             bets[msg.sender] = amount;
+            pool2 = pool2 + amount;
+
         }
     }
 
-    function updateScores(uint _score1, uint _score2) public{
+    function updateScores(uint _score1, uint _score2) private{
         score1 = _score1;
         score2 = _score2;
     }
@@ -98,13 +111,14 @@ contract BinaryLottery {
             //set winners to players1
             winners = players1;
             //calculate prize
-            amount = uint(players2.length * 10) / players1.length;
+            amount = uint(pool2) / players1.length;
+
         }
         else{
             //set winners to players2
             winners = players2;
             //calculate prize
-            amount = uint(players1.length * 10) / players2.length;
+            amount = uint(pool1) / players2.length;
         }
 
         //loop thru winning players to pay them
@@ -123,21 +137,26 @@ contract BinaryLottery {
 
         //loop thru players1 to reset bets
         for (uint i = 0; i < players1.length; i++){
-            bets[players1[i]] = 0;
+            delete bets[players1[i]];
+            //bets[players1[i]] = 0;
         }
         //loop thru players2 to reset bets
         for (uint i = 0; i < players2.length; i++){
-            bets[players2[i]] = 0;
+            delete bets[players2[i]];
+            //bets[players2[i]] = 0;
         }
         
-        //reset arrays
+        //reset variables
         players1 = new address payable[](0);
         players2 = new address payable[](0);
+        pool1 = 0;
+        pool2 = 0;
         lotteryId += 1;
     }
 
     //backend call to end lottery, pay back players and pick winner
-    function endLottery(uint _score1, uint _score2) private{
+    function endLottery(uint _score1, uint _score2) public{
+        require(LotteryOpen == true, "Lottery: Lottery is not open.");
         require(manager == msg.sender, "Lottery: permission denied.");
 
         //close the lottery
