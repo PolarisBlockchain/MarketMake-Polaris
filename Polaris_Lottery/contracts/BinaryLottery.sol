@@ -56,14 +56,9 @@ contract BinaryLottery {
     event AnnounceWinner(uint _winningTeam, uint _id, uint _amount);
 
     
-<<<<<<< HEAD
-    //frontend call this function to start lottery
-    function startLottery() private{
-=======
     //backend call this function to start lottery
     function startLottery() public{
         require(LotteryOpen == false, "Lottery: Lottery is open.");
->>>>>>> 5000dbd81bf6911803ff1b9f8d585a260bedc99c
         require(manager == msg.sender, "Lottery: permission denied.");
         LotteryOpen = true;
         pool1 = 0;
