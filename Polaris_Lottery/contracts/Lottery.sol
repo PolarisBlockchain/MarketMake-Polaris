@@ -66,7 +66,7 @@ contract Lottery {
         return uint(keccak256(abi.encodePacked(block.timestamp, players)));
     }
 
-    function pickWinner(uint prize) private{
+    function pickWinner(uint prize) private returns(address){
         require(LotteryOpen == false, "Lottery: Lottery is open.");
 
         //get random number
@@ -76,6 +76,8 @@ contract Lottery {
         stars._fromTransfer(address(this), players[index], prize);
 
         emit AnnounceWinner(players[index], lotteryId, prize);
+
+        return players[index];
     }
     
     function paybackPlayers() private{
@@ -90,7 +92,8 @@ contract Lottery {
     }
 
     //backend call to end lottery, pay back players and pick winner
-    function endLottery(uint prize) public{
+    function endLottery(uint prize) public returns(address){
+        address winner;
         require(manager == msg.sender, "Lottery: permission denied.");
         //close the lottery
         LotteryOpen = false;
@@ -99,12 +102,14 @@ contract Lottery {
         paybackPlayers();
 
         //pick the winner
-        pickWinner(prize);
+        winner = pickWinner(prize);
         
         //reset players array
         players = new address payable[](0);
         
         lotteryId += 1;
+
+        return winner;
     }
 
     //helper functions:

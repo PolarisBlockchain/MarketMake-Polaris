@@ -21,7 +21,7 @@ contract LotteryFactory {
     address[] public lotteries;
 
     //play with stars coins
-    address payable coinContract = 0x0888000000000000000000000000000000000001;
+    address payable coinContract = 0x0888000000000000000000000000000000000001;//change this to our token contract
     StarsCoins stars = StarsCoins(coinContract);
 
     //announcements
@@ -32,7 +32,7 @@ contract LotteryFactory {
     }
 
     //backend calls to create a lottery contract
-    function create(uint lottery_type) public returns(address){
+    function create(uint lottery_type) public returns(address, uint, uint){
         require(manager == msg.sender, "LotteryFactory: permission denied.");
         uint id;
 
@@ -49,7 +49,18 @@ contract LotteryFactory {
         }
         emit newLottery(id, lottery_type);
 
-        return lotteries[id];
+        return (lotteries[id], id, lottery_type);
+    }
+
+    //helpers
+    function getAddress(uint _id) public returns(address){
+        require(manager == msg.sender, "LotteryFactory: permission denied.");
+        return lotteries[_id];
+    }
+
+    function getNumDeployedLotteries() public returns(uint){
+        require(manager == msg.sender, "LotteryFactory: permission denied.");
+        return lotteries.length;
     }
 
 
