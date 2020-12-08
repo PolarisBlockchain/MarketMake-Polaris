@@ -7,10 +7,15 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "apidoc": "^0.25.0",
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "js-conflux-sdk": "^0.13.5"
+  },
+  "apidoc": {
+    "title": "API Doc",
+    "url": "http://localhost:3000"
   }
 }
