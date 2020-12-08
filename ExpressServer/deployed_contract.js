@@ -1,6 +1,6 @@
-export const StarsCoins_Address = '0x83bd2e36f7f6c47cfb87113eb165a8f4de275f24'
+const StarsCoins_Address = '0x83bd2e36f7f6c47cfb87113eb165a8f4de275f24'
 
-export const StarsCoins_ABI = [
+const StarsCoins_ABI = [
     {
       "inputs": [],
       "stateMutability": "nonpayable",
@@ -358,9 +358,9 @@ export const StarsCoins_ABI = [
     }
 ]
 
-export const Lottery_Address = '0x80ad055601ff8d3df45f7e4fa5e7a3144f15a798'
+const Lottery_Address = '0x80ad055601ff8d3df45f7e4fa5e7a3144f15a798'
 
-export const Lottery_ABI = [
+const Lottery_ABI = [
     {
       "inputs": [
         {
@@ -530,9 +530,9 @@ export const Lottery_ABI = [
     }
 ]
 
-export const BinaryLottery_Address = '0x8efa9e7261db604a485d81dcb37f2112c5a3744e'
+const BinaryLottery_Address = '0x8efa9e7261db604a485d81dcb37f2112c5a3744e'
 
-export const BinaryLottery_ABI = [
+const BinaryLottery_ABI = [
     {
       "inputs": [
         {
@@ -763,9 +763,9 @@ export const BinaryLottery_ABI = [
     }
 ]
 
-export const LotteryFactory_Address = '0x8a0381d48f84468b2abd139f2bae9d503a318d61'
+const LotteryFactory_Address = '0x8a0381d48f84468b2abd139f2bae9d503a318d61'
 
-export const LotteryFactory_ABI = [
+const LotteryFactory_ABI = [
     {
       "inputs": [],
       "stateMutability": "nonpayable",
@@ -837,3 +837,5 @@ export const LotteryFactory_ABI = [
       "type": "function"
     }
 ]
+
+export {StarsCoins_Address, StarsCoins_ABI, Lottery_Address, Lottery_ABI, BinaryLottery_Address, BinaryLottery_ABI, LotteryFactory_Address, LotteryFactory_ABI};
