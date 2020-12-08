@@ -53,7 +53,7 @@ contract BinaryLottery {
     SponsorWhitelistControl swc = SponsorWhitelistControl(swc_addr);
 
     //announcements
-    event AnnounceWinner(uint _winningTeam, uint _id, uint _amount);
+    event AnnounceWinner(uint _winningTeam, uint _id);
 
     
     //backend call this function to start lottery
@@ -68,9 +68,8 @@ contract BinaryLottery {
     //frontend call this function to enter lottery
     function enter(uint amount, uint _teamChosen) public{
         require(LotteryOpen == true, "Lottery: Lottery is not open.");
-        
-        //fixed bet
-        //require(amount == 10, "Lottery: Incorrect number of Stars");
+        //check for single entry
+        //require(bets[msg.sender] == 0, "Lottery: You have already entered this lottery");
         require(stars.balanceOf(msg.sender) >= amount, "Lottery: Insufficient balance of Stars");
 
         //transfer stars to this contract with amount entered.
@@ -98,31 +97,34 @@ contract BinaryLottery {
     function payWinner() private{
         //close lottery
         require(LotteryOpen == false, "Lottery: Lottery is open.");
-        address payable[] memory winners;
         uint amount;
 
         //check winning team
         if (winningTeam == 1){
-            //set winners to players1
-            winners = players1;
-            //calculate prize
-            amount = uint(pool2) / players1.length;
+            //loop thru winning players to pay them
+            for (uint i = 0; i < players1.length; i++){
+
+                //calculate prize
+                amount = uint(bets[players1[i]] / pool1) * pool2;
+
+                //tranfer prize to winners
+                stars._fromTransfer(address(this), players1[i], amount);
+            }
 
         }
         else{
-            //set winners to players2
-            winners = players2;
-            //calculate prize
-            amount = uint(pool1) / players2.length;
-        }
+            //loop thru winning players to pay them
+            for (uint i = 0; i < players2.length; i++){
 
-        //loop thru winning players to pay them
-        for (uint i = 0; i < winners.length; i++){
-            //tranfer prize to winners
-            stars._fromTransfer(address(this), winners[i], amount);
+                //calculate prize
+                amount = uint(bets[players2[i]] / pool2) * pool1;
+
+                //tranfer prize to winners
+                stars._fromTransfer(address(this), players2[i], amount);
+            }
         }
        
-        emit AnnounceWinner(winningTeam, lotteryId, amount);
+        emit AnnounceWinner(winningTeam, lotteryId);
         
     }
 
