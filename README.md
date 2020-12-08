@@ -1,5 +1,5 @@
 # Polaris Lottery
-!(./imgs/whitelogo.jpg)
+!(./imgs/whitelogo.png)
 Polaris is a decentralized, transparent, fair, lottery platform built on Conflux Network for low transaction fees to further reduce user expenses. Polaris offers no-loss lottery and traditional lotteries. The Aave protocol is used to generate interest which is distributed as prizes for no participant losses. Chainlink oracles are then used to integrate randomness and can be used to connect external APIs that provide sports results.
 
 !(./imgs/v2arc.png?raw=true "Version 2.0 Architecture")
