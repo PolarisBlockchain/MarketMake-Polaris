@@ -3,6 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { Conflux } = require("js-conflux-sdk");
+const cors = require('cors')
 require("dotenv").config();
 
 const BinaryLottery_Address = '0x87a982f2a7b985e2b6c3818d290425b4845381f4'
@@ -233,6 +234,7 @@ const BinaryLottery_ABI = [
 ]
 
 const app = express();
+app.use(cors())
 const port = 5001;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;
