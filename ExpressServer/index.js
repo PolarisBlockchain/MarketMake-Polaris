@@ -315,7 +315,23 @@ const main = () => {
    * Pick random game
    */
   app.get(BASE_URL + "/nba/demo", async (_, res) => {
-
+    const year = 2019;
+    let config = getNBAAPIAxiosConfig(NBA_URL_PATHS.seasonYear+year);
+    const index = Math.floor(Math.random()*10);
+    axios(config)
+    .then(function (response) {
+      const games = response.data.api.games;
+      const game = {
+        "gameID": games[index].gameId,
+        "startTimeUTC": games[index].startTimeUTC,
+        "vTeam": games[index].vTeam,
+        "hTeam": games[index].hTeam
+      }
+      res.status(200).send(game);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   })
 
   /**
@@ -381,11 +397,11 @@ const main = () => {
       const score2 = game.vTeam.score.points;
 
       confluxEndLottery(score1, score2).then(() => {
-        res.status(200).end();
       })
       .catch(function (error){
         console.log(error);
       })
+      res.status(200).end();;
     })
     .catch(function (error) {
       console.log(error);
@@ -487,11 +503,11 @@ const main = () => {
       }
 
       confluxEndLottery(score1, score2).then(() => {
-        res.status(200).end();
       })
       .catch(function (error){
         console.log("conflux End Lottery: ", error);
-      })
+      });
+      res.status(200).end();
     })
     .catch(function (error) {
       console.log("coins timesup: ", error);
