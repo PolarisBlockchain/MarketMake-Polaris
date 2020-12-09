@@ -21,7 +21,7 @@ contract LotteryFactory {
     address[] public lotteries;
 
     //play with stars coins
-    address payable coinContract = 0x8CfaE18BC701B4BEF916D19F45DB0bA206dc346E;//change this to our token contract
+    address payable coinContract = 0x8E0542c3b15BE43C38A4F67B8518E9708B22b6CB;//change this to our token contract
     StarsCoins stars = StarsCoins(coinContract);
 
     //announcements

@@ -359,11 +359,10 @@ const StarsCoins_ABI = [
   }
 ]
 
-const Lottery_Address = '0x824a8471562d2a2e51f956970ec420158145168c'
+const Lottery_Address = '0x823ed0870d47caf15ad9b752d18e1533cbe36d64'
 
 const Lottery_ABI = [
-
-  {
+ {
     "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor",
@@ -532,10 +531,9 @@ const Lottery_ABI = [
   }
 ]
 
-const BinaryLottery_Address = '0x85088ef94fb9013e003743e9d7c8d3e66126a1a7'
+const BinaryLottery_Address = '0x8a3d091c78f038761c3abb5935e1e5cd1b518f42'
 
 const BinaryLottery_ABI = [
-
   {
     "inputs": [],
     "stateMutability": "nonpayable",
@@ -773,7 +771,8 @@ const BinaryLottery_ABI = [
   }
 ]
 
-const LotteryFactory_Address = '0x83387c1ef9bc755c3cdd84aa80c4c18deaecd44d'
+
+const LotteryFactory_Address = '0x8920718aac394a005218f60e202bd60b493ef6ca'
 
 const LotteryFactory_ABI = [
   {
