@@ -11,6 +11,8 @@ Polaris_Lottery - STAR Token, Lottery Contract on Conflux Netowork, deployed on 
 
 polaris-frontend - frontend of Polaris, uses React, Web3.js and Conflux javascript lib
 
+ExpressServer - backend of Polaris, retrieves API data and interacts with Conflux smart contracts
+
 
 # Version 2.0 Architecture
 ![Version 2.0 Architecture](./imgs/v2arc.PNG)
