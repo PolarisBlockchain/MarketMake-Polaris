@@ -1,6 +1,7 @@
-const StarsCoins_Address = '0x8aa3095118305922ca7a4d01370275a9cd9b3fd6'
+const StarsCoins_Address = '0x8e0542c3b15be43c38a4f67b8518e9708b22b6cb'
 
 const StarsCoins_ABI = [
+
   {
     "inputs": [],
     "stateMutability": "nonpayable",
@@ -358,17 +359,12 @@ const StarsCoins_ABI = [
   }
 ]
 
-const Lottery_Address = '0x8b5747fe1e8460f8f5f145bd5723239c3b84e959'
+const Lottery_Address = '0x824a8471562d2a2e51f956970ec420158145168c'
 
 const Lottery_ABI = [
+
   {
-    "inputs": [
-      {
-        "internalType": "address payable",
-        "name": "_coinContract",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor",
     "name": "constructor"
@@ -461,7 +457,7 @@ const Lottery_ABI = [
     "name": "endLottery",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "",
         "type": "address"
       }
@@ -536,17 +532,12 @@ const Lottery_ABI = [
   }
 ]
 
-const BinaryLottery_Address = '0x87a982f2a7b985e2b6c3818d290425b4845381f4'
+const BinaryLottery_Address = '0x85088ef94fb9013e003743e9d7c8d3e66126a1a7'
 
 const BinaryLottery_ABI = [
+
   {
-    "inputs": [
-      {
-        "internalType": "address payable",
-        "name": "_coinContract",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor",
     "name": "constructor"
@@ -568,6 +559,25 @@ const BinaryLottery_ABI = [
       }
     ],
     "name": "AnnounceWinner",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "p1",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "p2",
+        "type": "uint256"
+      }
+    ],
+    "name": "numPlayers",
     "type": "event"
   },
   {
@@ -763,7 +773,7 @@ const BinaryLottery_ABI = [
   }
 ]
 
-const LotteryFactory_Address = '0x87f22a377ef4f10c08e71804114c151989a73e9f'
+const LotteryFactory_Address = '0x83387c1ef9bc755c3cdd84aa80c4c18deaecd44d'
 
 const LotteryFactory_ABI = [
   {
