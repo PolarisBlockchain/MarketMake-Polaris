@@ -21,7 +21,7 @@ contract LotteryFactory {
     address[] public lotteries;
 
     //play with stars coins
-    address payable coinContract = 0x0888000000000000000000000000000000000001;//change this to our token contract
+    address payable coinContract = 0x8CfaE18BC701B4BEF916D19F45DB0bA206dc346E;//change this to our token contract
     StarsCoins stars = StarsCoins(coinContract);
 
     //announcements
@@ -38,12 +38,12 @@ contract LotteryFactory {
 
         //create lottery according to type
         if(lottery_type == 1){
-            Lottery lot = new Lottery(coinContract);
+            Lottery lot = new Lottery();
             id = lotteries.length;
             lotteries.push(address(lot));
         }
         if(lottery_type == 2){
-            BinaryLottery lot = new BinaryLottery(coinContract);
+            BinaryLottery lot = new BinaryLottery();
             id = lotteries.length;
             lotteries.push(address(lot));
         }

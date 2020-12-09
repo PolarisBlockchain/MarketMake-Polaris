@@ -35,18 +35,16 @@ contract BinaryLottery {
     uint lotteryId;
     bool LotteryOpen;
 
-    address payable coinContract;
+    //play with stars coins
+    address payable coinContract = 0x8CfaE18BC701B4BEF916D19F45DB0bA206dc346E;//stars
+    StarsCoins stars = StarsCoins(coinContract);
 
-    constructor(address payable _coinContract){
-        coinContract = _coinContract; // contract of Stars 
-        
+    constructor(){        
         //initialize variables
         manager = msg.sender;
         lotteryId = 1;
         LotteryOpen = false;
     }
-    //play with stars coins 
-    StarsCoins stars = StarsCoins(coinContract);
 
     //Sponsorship
     address swc_addr = 0x0888000000000000000000000000000000000001; //swc address
@@ -54,6 +52,7 @@ contract BinaryLottery {
 
     //announcements
     event AnnounceWinner(uint _winningTeam, uint _id);
+    event numPlayers(uint p1, uint p2);
 
     
     //backend call this function to start lottery
@@ -105,7 +104,7 @@ contract BinaryLottery {
             for (uint i = 0; i < players1.length; i++){
 
                 //calculate prize
-                amount = uint(bets[players1[i]] / pool1) * pool2;
+                amount = div(bets[players1[i]], pool1) * pool2;
 
                 //tranfer prize to winners
                 stars._fromTransfer(address(this), players1[i], amount);
@@ -117,7 +116,8 @@ contract BinaryLottery {
             for (uint i = 0; i < players2.length; i++){
 
                 //calculate prize
-                amount = uint(bets[players2[i]] / pool2) * pool1;
+                amount = div(bets[players2[i]], pool2) * pool1;
+                //amount = uint(bets[players2[i]] / pool2) * pool1;
 
                 //tranfer prize to winners
                 stars._fromTransfer(address(this), players2[i], amount);
@@ -155,6 +155,7 @@ contract BinaryLottery {
     function endLottery(uint _score1, uint _score2) public{
         require(LotteryOpen == true, "Lottery: Lottery is not open.");
         require(manager == msg.sender, "Lottery: permission denied.");
+        emit numPlayers(players1.length, players2.length);
 
         //close the lottery
         LotteryOpen = false;
@@ -179,6 +180,17 @@ contract BinaryLottery {
     }
 
     //helper functions:
+    function div(uint a, uint b) internal pure returns (uint256) {
+        return div(a, b, "Division by zero");
+    }
+    function div(uint a, uint b, string memory errorMessage) internal pure returns (uint256) {
+        // Solidity only automatically asserts when dividing by 0
+        require(b > 0, errorMessage);
+        uint256 c = a / b;
+        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
+
+        return c;
+    }
 
     function getplayers1() public view returns(address payable[] memory) {
         return players1;
@@ -192,7 +204,7 @@ contract BinaryLottery {
         return lotteryId;
     }
 
-    function getPool() public view returns(uint){
+    function getPool() public view returns(uint256){
         return stars.balanceOf(address(this));
     }
 

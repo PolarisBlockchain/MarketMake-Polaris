@@ -21,18 +21,18 @@ contract Lottery {
     uint lotteryId;
     bool LotteryOpen;
 
-    address payable coinContract;
+    //play with stars coins
+    address payable coinContract = 0x8CfaE18BC701B4BEF916D19F45DB0bA206dc346E;//stars
+    StarsCoins stars = StarsCoins(coinContract);
 
-    constructor(address payable _coinContract){     
-        coinContract = _coinContract; // contract of Stars 
+    constructor(){     
+        //coinContract = _coinContract; // contract of Stars 
 
         //initialize variables
         manager = msg.sender;
         lotteryId = 1;
         LotteryOpen = false;
     }
-    //play with stars coins
-    StarsCoins stars = StarsCoins(coinContract);
     
     //Sponsorship
     address swc_addr = 0x0888000000000000000000000000000000000001; //swc address
