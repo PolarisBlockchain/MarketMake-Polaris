@@ -25,6 +25,7 @@ import {
   Lottery_Address, Lottery_ABI,
   BinaryLottery_Address, BinaryLottery_ABI,
   LotteryFactory_Address, LotteryFactory_ABI,
+  Disclaimer
 } from '../abi/abi'
 
 import axios from 'axios';
@@ -50,6 +51,7 @@ import {
   Col
 } from "reactstrap";
 import { MetaMaskButton } from 'rimble-ui';
+import Popup from 'reactjs-popup';
 
 // core components
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
@@ -215,7 +217,7 @@ class RegisterPage extends React.Component {
         {   from: this.state.ethAddress,
             //gas: gas,
             //gasLimit: gasLimit,
-            value: web3.utils.toWei(this.state.depositEthAmount, "ether"),
+            value: this.state.depositEthAmount,//web3.utils.toWei(this.state.depositEthAmount, "ether"),
         }, 
         function (err, res) {
             if (err) {
@@ -230,9 +232,9 @@ class RegisterPage extends React.Component {
 
     if(tx_success){
       //release STAR token to user
-      console.log(this.state.depositEthAmount * Math.pow(10, 3));
+      console.log(this.state.depositEthAmount);
       console.log(this.state.confluxAddress);
-      mint_star_token(this.state.confluxAddress, this.state.depositEthAmount* Math.pow(10, 3))
+      mint_star_token(this.state.confluxAddress, this.state.depositEthAmount)
       this.checkStarBalance();
     }
   }
@@ -296,12 +298,12 @@ class RegisterPage extends React.Component {
     const tx = NoLossLottery.enter(10);
     const transactionParameters = {
       gasPrice: '0x09184e72a000', // customizable by user during ConfluxPortal confirmation.
-      gas: '0x5208',  // customizable by user during ConfluxPortal confirmation.
+      gas: '0x186A0',  // customizable by user during ConfluxPortal confirmation.
       to: NoLossLottery.address, // Required except during contract publications.
       from: this.state.confluxAddress, // must match user's active address.
       value: '0x00', // Only required to send ether to the recipient from the initiating external account.
       data: tx.data, // Optional, but used for defining smart contract creation and interaction.
-      storageLimit: '2048' // used to limit the total storage usage of a transaction
+      storageLimit: '0x400' // used to limit the total storage usage of a transaction
     }
     
     window.conflux.sendAsync({
@@ -346,6 +348,13 @@ class RegisterPage extends React.Component {
       from: this.state.confluxAddress,
     }, ()=>{})
 
+  }
+
+  showDisclaimer = (e) => {
+    e.preventDefault()
+    var myWindow = window.open("", "Polaris Lottery Disclaimer", "width=500,height=500");
+    myWindow.document.write('<title>Polaris Lottery Disclaimer</title>');
+    myWindow.document.write("<p>"+Disclaimer+"</p>");
   }
   
 
@@ -397,14 +406,14 @@ class RegisterPage extends React.Component {
                       <CardBody>
                         <p>First get some STAR tokens by depositing ETH!!</p>
                         <br/>
-                        <p>eth address: {this.state.ethAddress}</p>
+                        <p>ethereum address: {this.state.ethAddress}</p>
                         <MetaMaskButton onClick={this.connect_metamask}>Connect with MetaMask</MetaMaskButton>
                         <p>conflux address: {this.state.confluxAddress}</p>
                         <Button color="primary" onClick={this.connect_conflux_portal}>Connect with Conflux Portal</Button>
                         
                         <Form className="form" onSubmit={this.deposit_eth}>
                           <label>
-                            Deposit Ether
+                            Deposit Wei 
                             <InputGroup
                               className={classnames({
                                 "input-group-focus": this.state.passwordFocus
@@ -417,7 +426,7 @@ class RegisterPage extends React.Component {
                               </InputGroupAddon>
                               <Input
                                 onChange={(t) => this.setState({depositEthAmount: t.target.value})}
-                                placeholder="amount in eth"
+                                placeholder="amount in wei"
                                 type="text"
                                 onFocus={e =>
                                   this.setState({ passwordFocus: true })
@@ -531,7 +540,7 @@ class RegisterPage extends React.Component {
                              <br/>
                              {this.state.no_loss_num_players} players
                              <br/>
-                             {this.state.no_loss_pool_amount} pool amount
+                             {this.state.no_loss_pool_amount} STARs in pool
                              <br/>
                              <pre></pre>
                              Time left: 
@@ -546,12 +555,13 @@ class RegisterPage extends React.Component {
                       </CardBody>
                       <CardFooter>
                           <FormGroup check className="text-left">
+                          
                             <Label check>
                               <Input type="checkbox" />
                               <span className="form-check-sign" />I agree to the{" "}
                               <a
                                 href="#pablo"
-                                onClick={e => e.preventDefault()}
+                                onClick={(e) => {this.showDisclaimer(e)}}
                               >
                                 terms and conditions
                               </a>

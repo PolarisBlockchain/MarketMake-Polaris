@@ -51,6 +51,7 @@
     "react-dom": "16.13.1",
     "react-router-dom": "5.1.2",
     "react-scripts": "3.4.1",
+    "reactjs-popup": "^2.0.4",
     "reactstrap": "8.4.1",
     "rimble-ui": "^0.14.0",
     "styled-components": "^5.2.1",
