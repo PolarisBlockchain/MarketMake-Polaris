@@ -28,6 +28,6 @@ resource - resources and documentations for project
 
 
 # Technologies
-![Conflux](./imgs/conflux.png){:width="400px"}
-![Aave](./imgs/aave.png){:width="400px"}
-![RapidAPI](./imgs/rapidapi.png){:width="400px"}
+![Conflux](./imgs/conflux.png)
+![Aave](./imgs/aave.png){:height="50%" width="50%"}
+![RapidAPI](./imgs/rapidapi.png){:height="100px" width="200px"}
