@@ -28,4 +28,6 @@ resource - resources and documentations for project
 
 
 # Technologies
-<img src="./imgs/conflux.png" width="250"> <img src="./imgs/aave.png" width="250"> <img src="./imgs/rapidapi.png" width="250">
+<img src="./imgs/conflux.png" width="250"> 
+<img src="./imgs/aave.png" width="250">
+<img src="./imgs/rapidapi.png" width="250">
