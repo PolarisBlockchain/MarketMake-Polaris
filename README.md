@@ -22,7 +22,10 @@ resource - resources and documentations for project
 ![Version 2.0 Architecture](./imgs/v2arc.PNG)
 
 
-# Webpage Demo
-![Landing-page](./imgs/landing-page.png)
+# App Illustration
+![Landing-page](./imgs/landing-page-2.png)
 ![App-page](./imgs/app-page.png)
 
+
+# Technologies
+<img src="./imgs/conflux.png" width="250"> <img src="./imgs/aave.png" width="250"> <img src="./imgs/rapidapi.png" width="250">
