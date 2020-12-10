@@ -23,7 +23,7 @@ resource - resources and documentations for project
 
 
 # App Illustration
-![Landing-page](./imgs/landing-page2.png)
+![Landing-page](./imgs/landing-page-2.png)
 ![App-page](./imgs/app-page.png)
 
 
