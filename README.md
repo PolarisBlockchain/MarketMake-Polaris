@@ -22,7 +22,12 @@ resource - resources and documentations for project
 ![Version 2.0 Architecture](./imgs/v2arc.PNG)
 
 
-# Webpage Demo
+# App Illustration
 ![Landing-page](./imgs/landing-page2.png)
 ![App-page](./imgs/app-page.png)
 
+
+# Technologies
+![Conflux](./imgs/conflux.png)
+![Aave](./imgs/aave.png)
+![RapidAPI](./imgs/rapidapi.png)
