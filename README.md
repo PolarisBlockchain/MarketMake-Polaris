@@ -29,5 +29,6 @@ resource - resources and documentations for project
 
 # Technologies
 ![Conflux](./imgs/conflux.png)
+[[./imgs/conflux.png|width=200px]]
 ![Aave](./imgs/aave.png){:height="50%" width="50%"}
 ![RapidAPI](./imgs/rapidapi.png){:height="100px" width="200px"}
