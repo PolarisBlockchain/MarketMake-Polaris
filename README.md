@@ -21,3 +21,8 @@ resource - resources and documentations for project
 # Version 2.0 Architecture
 ![Version 2.0 Architecture](./imgs/v2arc.PNG)
 
+
+# Webpage Demo
+![Landing-page](./imgs/landing-page.PNG)
+![App-page](./imgs/app-page.PNG)
+
