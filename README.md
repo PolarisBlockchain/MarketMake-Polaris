@@ -23,6 +23,6 @@ resource - resources and documentations for project
 
 
 # Webpage Demo
-![Landing-page](./imgs/landing-page.png)
+![Landing-page](./imgs/landing-page2.png)
 ![App-page](./imgs/app-page.png)
 
