@@ -46,30 +46,30 @@ class Footer extends React.Component {
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="/landing-page" tag={Link}>
-                    Landing
+                  <NavLink to="/app" tag={Link}>
+                    App
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="/register-page" tag={Link}>
-                    Register
+                  <NavLink to="/about-us" tag={Link}>
+                    About us
                   </NavLink>
                 </NavItem>
-                <NavItem>
+                {/* <NavItem>
                   <NavLink to="/profile-page" tag={Link}>
                     Profile
                   </NavLink>
-                </NavItem>
+                </NavItem> */}
               </Nav>
             </Col>
             <Col md="3">
               <Nav>
                 <NavItem>
-                  <NavLink href="https://creative-tim.com/contact-us?ref=blkdsr-footer">
-                    Contact Us
+                  <NavLink href="https://github.com/SamT6/TIBA_conflux_lottery">
+                    Github
                   </NavLink>
                 </NavItem>
-                <NavItem>
+                {/* <NavItem>
                   <NavLink href="https://creative-tim.com/about-us?ref=blkdsr-footer">
                     About Us
                   </NavLink>
@@ -83,10 +83,10 @@ class Footer extends React.Component {
                   <NavLink href="https://opensource.org/licenses/MIT">
                     License
                   </NavLink>
-                </NavItem>
+                </NavItem> */}
               </Nav>
             </Col>
-            <Col md="3">
+            {/* <Col md="3">
               <h3 className="title">Follow us:</h3>
               <div className="btn-wrapper profile">
                 <Button
@@ -126,7 +126,7 @@ class Footer extends React.Component {
                   Follow us
                 </UncontrolledTooltip>
               </div>
-            </Col>
+            </Col> */}
           </Row>
         </Container>
       </footer>

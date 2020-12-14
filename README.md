@@ -21,6 +21,8 @@ resource - resources and documentations for project
 # Version 2.0 Architecture
 ![Version 2.0 Architecture](./imgs/v2arc.PNG)
 
+# User Story
+![User Story](./imgs/user-story.png)
 
 # App Illustration
 ![Landing-page](./imgs/landing-page-2.png)

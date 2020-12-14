@@ -48,7 +48,7 @@ class Index extends React.Component {
         <IndexNavbar />
         <div className="wrapper">
           <PageHeader />
-          <div className="main">
+          {/* <div className="main">
             <Basics />
             <Navbars />
             <Tabs />
@@ -60,7 +60,7 @@ class Index extends React.Component {
             <Signup />
             <Examples />
             <Download />
-          </div>
+          </div> */}
           <Footer />
         </div>
       </>

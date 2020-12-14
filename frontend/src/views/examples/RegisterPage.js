@@ -29,6 +29,7 @@ import {
 } from '../abi/abi'
 
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import Countdown from 'react-countdown';
 // reactstrap components
 import {
@@ -91,6 +92,14 @@ const LotteryContract = {
   }),
 }
 
+const LotteryFactoryContract = {
+  name: 'LotteryFactory',
+  contract: conflux_node.Contract({
+    abi: LotteryFactory_ABI,
+    address: LotteryFactory_Address,
+  }),
+}
+
 //same contract as above, just with different node
 const NoLossLottery = new conflux_portal.Contract({
   abi: Lottery_ABI,
@@ -125,7 +134,8 @@ class RegisterPage extends React.Component {
     star_token_amount: 0,
     lottery_num_people: "",
     lottery_pool_amount: "",
-    timer_second: 60,
+    timer_second: 3000,
+    eth_timer_second: 3600,
     no_loss_num_players: "",
     no_loss_pool_amount: "",
     no_loss_star_in_pool: "",
@@ -133,15 +143,26 @@ class RegisterPage extends React.Component {
     nba_game_home_short: "",
     nba_game_visitor_full: "",
     nba_game_visitor_short: "",
+    nba_date: "",
     nba_time: "",
     nba_bet_amount: 0,
     nba_selected_team: 2,
+    custom_lottery_question: "",
+    custom_lottery_answer: 2,
+    custom_lottery_address: "",
+    play_lottery_id: "",
+    play_lottery_time: "",
+    play_lottery_players: 0,
+    play_lottery_pool: 0,
+    play_lottery_question: "",
+    no_loss_lottery_winner: ""
   };
   componentDidMount() {
     document.body.classList.toggle("register-page");
     document.documentElement.addEventListener("mousemove", this.followCursor);
     //start the timer
     this.update_timer();
+    this.update_eth_timer();
   }
 
   update_timer = () => {
@@ -154,8 +175,23 @@ class RegisterPage extends React.Component {
       }, 1000)
     }
     else{
-      this.setState({timer_second: 60 })
+      this.setState({timer_second: 3000 })
       this.update_timer();
+    }
+  }
+
+  update_eth_timer = () => {
+    if(this.state.eth_timer_second > 0){
+      setTimeout(()=>{
+        this.setState((state, props) => ({
+          eth_timer_second: state.eth_timer_second - 1
+        }));
+        this.update_eth_timer()
+      }, 1000)
+    }
+    else{
+      this.setState({eth_timer_second: 3600 })
+      this.update_eth_timer();
     }
   }
 
@@ -217,7 +253,7 @@ class RegisterPage extends React.Component {
         {   from: this.state.ethAddress,
             //gas: gas,
             //gasLimit: gasLimit,
-            value: this.state.depositEthAmount,//web3.utils.toWei(this.state.depositEthAmount, "ether"),
+            value: web3.utils.toWei(this.state.depositEthAmount, "ether"),
         }, 
         function (err, res) {
             if (err) {
@@ -234,7 +270,7 @@ class RegisterPage extends React.Component {
       //release STAR token to user
       console.log(this.state.depositEthAmount);
       console.log(this.state.confluxAddress);
-      mint_star_token(this.state.confluxAddress, this.state.depositEthAmount)
+      mint_star_token(this.state.confluxAddress, this.state.depositEthAmount * Math.pow(10, 2))
       this.checkStarBalance();
     }
   }
@@ -313,6 +349,32 @@ class RegisterPage extends React.Component {
     }, ()=>{})
   }
 
+  end_no_loss_lottery = async () =>{
+    console.log("ending lottery...");
+    //make end lottery transaction 
+    const txhash = await LotteryContract.contract.endLottery(0).sendTransaction({
+      from: cfx_sender.address,
+      gasPrice: '0x09184e72a000', // customizable by user during ConfluxPortal confirmation.
+      gas: '0x186A0',  // customizable by user during ConfluxPortal confirmation.
+    });
+    console.log("txhash: ", txhash);
+
+    //start a new round of lottery
+    // const tx = await LotteryContract.contract.startLottery().sendTransaction({
+    //   from: cfx_sender.address,
+    //   gasPrice: '0x09184e72a000', // customizable by user during ConfluxPortal confirmation.
+    //   gas: '0x186A0',  // customizable by user during ConfluxPortal confirmation.
+    // });
+    // console.log("txhash: ", tx);
+
+    setTimeout(()=>{
+      this.setState({
+        timer_second: 3600,
+        no_loss_lottery_winner: `recent winner: ${this.state.confluxAddress}`
+      });
+    }, 5000);
+  }
+
   fetch_NBA_Info = async () => {
     axios.get('http://localhost:5001/api/v1/nba/demo')
          .then(response => {
@@ -322,24 +384,27 @@ class RegisterPage extends React.Component {
               nba_game_home_short: response.data.hTeam.shortName,
               nba_game_visitor_full: response.data.vTeam.fullName,
               nba_game_visitor_short: response.data.vTeam.shortName,
-              nba_time: response.data.startTimeUTC,
+              nba_date: response.data.startTimeUTC.split("T")[0],
+              nba_time: response.data.startTimeUTC.split("T")[1],
             })
           })
   }
 
   enter_nba_lottery = async () => {
+    console.log(typeof(this.state.nba_selected_team));
+    console.log(typeof(parseInt(this.state.nba_bet_amount)));
     console.log(this.state.nba_selected_team);
-    console.log(this.state.nba_bet_amount );
-
-    const tx = NBALottery.enter(this.state.nba_bet_amount, this.state.nba_selected_team);
+    console.log(parseInt(this.state.nba_bet_amount));
+    
+    const tx = NBALottery.enter(parseInt(this.state.nba_bet_amount), this.state.nba_selected_team);
     const transactionParameters = {
       gasPrice: '0x09184e72a000', // customizable by user during ConfluxPortal confirmation.
-      gas: '0x5208',  // customizable by user during ConfluxPortal confirmation.
-      to: NoLossLottery.address, // Required except during contract publications.
+      gas: '0x186A0',  // customizable by user during ConfluxPortal confirmation.
+      to: NBALottery.address, // Required except during contract publications.
       from: this.state.confluxAddress, // must match user's active address.
       value: '0x00', // Only required to send ether to the recipient from the initiating external account.
       data: tx.data, // Optional, but used for defining smart contract creation and interaction.
-      storageLimit: '1024' // used to limit the total storage usage of a transaction
+      storageLimit: '0x400' // used to limit the total storage usage of a transaction
     }
     
     window.conflux.sendAsync({
@@ -355,6 +420,51 @@ class RegisterPage extends React.Component {
     var myWindow = window.open("", "Polaris Lottery Disclaimer", "width=500,height=500");
     myWindow.document.write('<title>Polaris Lottery Disclaimer</title>');
     myWindow.document.write("<p>"+Disclaimer+"</p>");
+  }
+  
+  deploy_custom_lottery = async (e) =>{
+    e.preventDefault()
+    console.log(this.state.custom_lottery_question);
+    console.log(this.state.custom_lottery_answer);
+    //tx to deploy contract
+    // const txhash = await LotteryFactoryContract.contract.create(2).sendTransaction({
+    //   from: cfx_sender.address,
+    // }, function(error, res){
+    //   console.log("returned data");
+    //   console.log(res);
+    // });
+
+    //need contract address
+    const  uid = uuidv4()
+    console.log("id: ", uid);
+    const lottery = {
+      id: uid,
+      question: this.state.custom_lottery_question,
+      answer: this.state.custom_lottery_answer
+    }
+
+    axios.post("http://localhost:3001/contracts", lottery)
+         .then(response => {
+           console.log(response);
+         })
+
+    setTimeout(()=>{
+      this.setState({custom_lottery_address: uid});
+    }, 3000);
+  }
+
+  get_play_lottery = (e) =>{
+    e.preventDefault()
+    axios.get(`http://localhost:3001/contracts/${this.state.play_lottery_id}`)
+         .then(response =>{
+           console.log(response.data);
+           this.setState({
+             play_lottery_question: response.data.question,
+             play_lottery_time: "one hour",
+             play_lottery_players: 0,
+             play_lottery_pool: 0
+           })
+         })
   }
   
 
@@ -413,7 +523,7 @@ class RegisterPage extends React.Component {
                         
                         <Form className="form" onSubmit={this.deposit_eth}>
                           <label>
-                            Deposit Wei 
+                            Deposit Ether (1 STAR = 0.01 ETH)
                             <InputGroup
                               className={classnames({
                                 "input-group-focus": this.state.passwordFocus
@@ -426,7 +536,7 @@ class RegisterPage extends React.Component {
                               </InputGroupAddon>
                               <Input
                                 onChange={(t) => this.setState({depositEthAmount: t.target.value})}
-                                placeholder="amount in wei"
+                                placeholder="amount in ether"
                                 type="text"
                                 onFocus={e =>
                                   this.setState({ passwordFocus: true })
@@ -536,8 +646,7 @@ class RegisterPage extends React.Component {
                           </label>
                           <p></p>
                           <label style={{fontSize: 15}}>
-                             You have *{this.state.no_loss_star_in_pool}* STAR tokens in lottery pool
-                             <br/>
+                             
                              {this.state.no_loss_num_players} players
                              <br/>
                              {this.state.no_loss_pool_amount} STARs in pool
@@ -549,6 +658,8 @@ class RegisterPage extends React.Component {
                               //renderer={this.count_down_renderer}
                              /> */}
                              {this.state.timer_second}s
+                             <br/>
+                             {this.state.no_loss_lottery_winner}
                           </label>
                     
                         </Form>
@@ -573,8 +684,8 @@ class RegisterPage extends React.Component {
                             <Button className="btn-round right" onClick={()=>{this.enter_no_loss_lottery()}}>
                               enter lottery
                             </Button>
-                            <Button className="btn-round right">
-                              withdraw
+                            <Button className="btn-round right" onClick={()=>{this.end_no_loss_lottery()}}>
+                              end lottery
                             </Button>
                           </Row>
                           
@@ -650,7 +761,7 @@ class RegisterPage extends React.Component {
                           <label style={{fontSize: 15}}>
                             Game: {this.state.nba_game_home_short} vs {this.state.nba_game_visitor_short}
                             <br/>
-                            Time: {this.state.nba_time}
+                            Time(UTC, 24hr): {this.state.nba_date+" "+this.state.nba_time.split('.')[0]}
                             <br/>    
                           </label>
                           <pre></pre>
@@ -721,7 +832,7 @@ class RegisterPage extends React.Component {
                               <span className="form-check-sign" />I agree to the{" "}
                               <a
                                 href="#pablo"
-                                onClick={e => e.preventDefault()}
+                                onClick={(e) => {this.showDisclaimer(e)}}
                               >
                                 terms and conditions
                               </a>
@@ -803,7 +914,7 @@ class RegisterPage extends React.Component {
                           <p>*not no-loss, yes-loss lottery :p</p>
                           <pre></pre>
                           <label style={{fontSize: 15}}>
-                            1 ETH {'>'} 600 USD in --time_count_down--?
+                            1 ETH {'>'} 600 USD in {this.state.eth_timer_second} sec?
                             <br/>  
                           </label>
                           <pre></pre>
@@ -850,7 +961,7 @@ class RegisterPage extends React.Component {
                                 </InputGroupText>
                               </InputGroupAddon>
                               <Input
-                                onChange={(t) => this.depositEthAmount = t.target.value}
+                                onChange={(t) => this.setState({nba_bet_amount: t.target.value})}
                                 placeholder="amount in star"
                                 type="text"
                                 onFocus={e =>
@@ -874,7 +985,7 @@ class RegisterPage extends React.Component {
                               <span className="form-check-sign" />I agree to the{" "}
                               <a
                                 href="#pablo"
-                                onClick={e => e.preventDefault()}
+                                onClick={(e) => {this.showDisclaimer(e)}}
                               >
                                 terms and conditions
                               </a>
@@ -973,6 +1084,7 @@ class RegisterPage extends React.Component {
                             </InputGroupAddon>
                             <Input
                               placeholder="question with an answer of yes or no"
+                              onChange={(t) => this.setState({custom_lottery_question: t.target.value})}
                               type="text"
                               onFocus={e => this.setState({ fullNameFocus: true })}
                               onBlur={e => this.setState({ fullNameFocus: false })}
@@ -981,7 +1093,7 @@ class RegisterPage extends React.Component {
                           <Col>
                               <p className="category">Pick the answer:</p>
                               <FormGroup check className="form-check-radio">
-                                <Label check>
+                                <Label check onClick={() => this.setState({custom_lottery_answer: 1})}>
                                   <Input
                                     defaultValue="option1"
                                     id="exampleRadios1"
@@ -993,7 +1105,7 @@ class RegisterPage extends React.Component {
                                 </Label>
                               </FormGroup>
                               <FormGroup check className="form-check-radio">
-                                <Label check>
+                                <Label check onClick={() => this.setState({custom_lottery_answer: 2})}>
                                   <Input
                                     defaultChecked
                                     defaultValue="option2"
@@ -1008,11 +1120,11 @@ class RegisterPage extends React.Component {
                             </Col>
                             <pre></pre>
                             <label style={{fontSize: 15}}>
-                              <Button className="btn-round right">
+                              <Button className="btn-round right" onClick={(e)=>{this.deploy_custom_lottery(e)}}>
                                 deploy lottery
                               </Button>
                               <pre></pre>
-                              <p>lottery address: --- </p>
+                              <p>lottery id: {this.state.custom_lottery_address} </p>
                             </label>
                       
                           
@@ -1097,19 +1209,25 @@ class RegisterPage extends React.Component {
                               </InputGroupText>
                             </InputGroupAddon>
                             <Input
-                              placeholder="lottery address"
+                              onChange={(t) => this.setState({play_lottery_id: t.target.value})}
+                              placeholder="lottery id"
                               type="text"
                               onFocus={e => this.setState({ fullNameFocus: true })}
                               onBlur={e => this.setState({ fullNameFocus: false })}
                             />
                           </InputGroup>
+                          <Button className="btn-round right" size="sm" onClick={e => {this.get_play_lottery(e)}}>
+                              enter 
+                          </Button>
                           <pre></pre>
                           <label style={{fontSize: 15}}>
-                            Time: ---
+                            Question: {this.state.play_lottery_question}
                             <br/>
-                            Players: ---
+                            Time: {this.state.play_lottery_time}
                             <br/>
-                            Pool: ---
+                            Players: {this.state.play_lottery_players}
+                            <br/>
+                            Pool: {this.state.play_lottery_pool}
                           </label>
                           <pre></pre>
                           <Col>
@@ -1178,7 +1296,7 @@ class RegisterPage extends React.Component {
                               <span className="form-check-sign" />I agree to the{" "}
                               <a
                                 href="#pablo"
-                                onClick={e => e.preventDefault()}
+                                onClick={(e) => {this.showDisclaimer(e)}}
                               >
                                 terms and conditions
                               </a>
