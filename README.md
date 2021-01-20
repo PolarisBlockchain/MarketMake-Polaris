@@ -1,0 +1,2 @@
+# MarketMake-Polaris
+A decentralized, transparent, fair, diverse lottery platform  utilizing Matic solutions to lower the extreme high gas fee on ETH, provide quick and affordable betting experience. It ultilizes yield farming protocols, such as Aave,to generate interest which is distributed as prizes for no participant losses. It offers sports and financial lottery by using Chainlink off-chain solutions and connecting to external APIs.
