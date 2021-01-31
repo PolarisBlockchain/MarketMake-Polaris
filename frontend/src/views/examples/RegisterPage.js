@@ -40,6 +40,10 @@ import {
   CardFooter,
   CardImg,
   CardTitle,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
   Label,
   FormGroup,
   Form,
@@ -155,8 +159,10 @@ class RegisterPage extends React.Component {
     play_lottery_players: 0,
     play_lottery_pool: 0,
     play_lottery_question: "",
-    no_loss_lottery_winner: ""
+    no_loss_lottery_winner: "",
+    dropdownOpen: false
   };
+
   componentDidMount() {
     document.body.classList.toggle("register-page");
     document.documentElement.addEventListener("mousemove", this.followCursor);
@@ -492,6 +498,28 @@ class RegisterPage extends React.Component {
           <div className="page-header">
             <div className="page-header-image" />
             <div className="content">
+              <Container>
+                <Row>
+                  <Dropdown 
+                    isOpen={this.state.dropdownOpen} 
+                    toggle={() => {this.setState({dropdownOpen: !this.state.dropdownOpen})}}
+                  >
+                    <DropdownToggle caret>
+                      Dropdown
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <DropdownItem header>Header</DropdownItem>
+                      <DropdownItem>Some Action</DropdownItem>
+                      <DropdownItem text>Dropdown Item Text</DropdownItem>
+                      <DropdownItem disabled>Action (disabled)</DropdownItem>
+                      <DropdownItem divider />
+                      <DropdownItem>Foo Action</DropdownItem>
+                      <DropdownItem>Bar Action</DropdownItem>
+                      <DropdownItem>Quo Action</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </Row>
+              </Container>
               <Container>
                 <Row>
                   <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
