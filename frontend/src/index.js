@@ -25,7 +25,9 @@ import "assets/demo/demo.css";
 
 import Index from "views/Index.js";
 import LandingPage from "views/examples/LandingPage.js";
-import RegisterPage from "views/examples/RegisterPage.js";
+import RegisterPageAave from "views/examples/RegisterPageAave.js";
+import RegisterPageConflux from "views/examples/RegisterPageConflux.js";
+import RegisterPageMatic from "views/examples/RegisterPageMatic.js";
 import ProfilePage from "views/examples/ProfilePage.js";
 
 ReactDOM.render(
@@ -37,8 +39,16 @@ ReactDOM.render(
         render={props => <LandingPage {...props} />}
       />
       <Route
-        path="/app"
-        render={props => <RegisterPage {...props} />}
+        path="/app/conflux"
+        render={props => <RegisterPageConflux {...props} />}
+      />
+      <Route
+        path="/app/matic"
+        render={props => <RegisterPageMatic {...props} />}
+      />
+      <Route
+        path="/app/aave"
+        render={props => <RegisterPageAave {...props} />}
       />
       <Route
         path="/about-us"

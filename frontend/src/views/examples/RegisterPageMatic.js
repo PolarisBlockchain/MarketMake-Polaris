@@ -127,7 +127,7 @@ const mint_star_token = async (conflux_account, amount) => {
   console.log("txhash: ", txhash);
 }
 
-class RegisterPage extends React.Component {
+class RegisterPageMatic extends React.Component {
   state = {
     squares1to6: "",
     squares7and8: "",
@@ -160,7 +160,8 @@ class RegisterPage extends React.Component {
     play_lottery_pool: 0,
     play_lottery_question: "",
     no_loss_lottery_winner: "",
-    dropdownOpen: false
+    dropdownOpen: false,
+    currentNetwork: "Conflux"
   };
 
   componentDidMount() {
@@ -505,17 +506,14 @@ class RegisterPage extends React.Component {
                     toggle={() => {this.setState({dropdownOpen: !this.state.dropdownOpen})}}
                   >
                     <DropdownToggle caret>
-                      Dropdown
+                      {this.state.currentNetwork}
                     </DropdownToggle>
                     <DropdownMenu>
-                      <DropdownItem header>Header</DropdownItem>
-                      <DropdownItem>Some Action</DropdownItem>
-                      <DropdownItem text>Dropdown Item Text</DropdownItem>
-                      <DropdownItem disabled>Action (disabled)</DropdownItem>
+                      <DropdownItem header>Choose Your Network</DropdownItem>
                       <DropdownItem divider />
-                      <DropdownItem>Foo Action</DropdownItem>
-                      <DropdownItem>Bar Action</DropdownItem>
-                      <DropdownItem>Quo Action</DropdownItem>
+                      <DropdownItem tag="a" href="/app/conflux">Conflux</DropdownItem>
+                      <DropdownItem tag="a" href="/app/matic">Matic</DropdownItem>
+                      <DropdownItem tag="a" href="/app/aave">Aave</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
                 </Row>
@@ -1386,4 +1384,4 @@ class RegisterPage extends React.Component {
   }
 }
 
-export default RegisterPage;
+export default RegisterPageMatic;
