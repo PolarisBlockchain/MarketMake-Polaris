@@ -1,0 +1,160 @@
+{
+  "network": "local.Node1",
+  "contractCreated": "0x8e9a0765ea1f77aac9bf435d02187190432a20ee",
+  "codeHash": "0xba98befd2be2f488288f4f0cbf4c2292678af22203a531ad836c541410a58e30",
+  "array": [],
+  "obj": {},
+  "tx": {
+    "nonce": 14,
+    "value": "0",
+    "gasPrice": "100",
+    "gas": "1000000",
+    "v": 1,
+    "transactionIndex": 0,
+    "status": 0,
+    "storageLimit": "1833",
+    "chainId": 0,
+    "epochHeight": 7835,
+    "blockHash": "0x99924585310e95f45c57641ec4abeb9cbb9b5a301d6bdfeb61bcd7a9a0aec086",
+    "contractCreated": "0x8e9a0765ea1f77aac9bf435d02187190432a20ee",
+    "data": "0x608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060016002819055506106a9806100686000396000f3fe6080604052600436106100555760003560e01c8063026b1d5f1461005a578063481c6a75146100855780635d495aea146100dc5780638b5b9ccc146100f3578063e97dcb621461015f578063f71d96cb14610169575b600080fd5b34801561006657600080fd5b5061006f6101e4565b6040518082815260200191505060405180910390f35b34801561009157600080fd5b5061009a6101ec565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156100e857600080fd5b506100f1610211565b005b3480156100ff57600080fd5b506101086103b0565b6040518080602001828103825283818151815260200191508051906020019060200280838360005b8381101561014b578082015181840152602081019050610130565b505050509050019250505060405180910390f35b61016761043e565b005b34801561017557600080fd5b506101a26004803603602081101561018c57600080fd5b81019080803590602001909291905050506104d1565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b600047905090565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600060018054905061022161050d565b8161022857fe5b0690507fb4ae4a1afc9b85f66aaaccca15285dabb32cd5913ee7f84a27e8c1a5d1929c416001828154811061025957fe5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1660025447604051808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001838152602001828152602001935050505060405180910390a1600181815481106102e457fe5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166108fc479081150290604051600060405180830381858888f19350505050158015610354573d6000803e3d6000fd5b5060006040519080825280602002602001820160405280156103855781602001602082028038833980820191505090505b506001908051906020019061039b9291906105a7565b50600160026000828254019250508190555050565b6060600180548060200260200160405190810160405280929190818152602001828054801561043457602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190600101908083116103ea575b5050505050905090565b678ac7230489e80000341461045257600080fd5b60013390806001815401808255809150509060018203906000526020600020016000909192909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050600560018054905014156104cf576104ce610211565b5b565b600181815481106104de57fe5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600042600160405160200180838152602001828054801561058357602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019060010190808311610539575b5050925050506040516020818303038152906040528051906020012060001c905090565b828054828255906000526020600020908101928215610620579160200282015b8281111561061f5782518260006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550916020019190600101906105c7565b5b50905061062d9190610631565b5090565b61067191905b8082111561066d57600081816101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905550600101610637565b5090565b9056fea265627a7a72315820baf41c6092bb2957d20c1d54f0359c4acab55daa8ca8796a817226398614f3a564736f6c63430005100032",
+    "from": "0x127b10d9ec6f4c74915068d3372924e54fa705cd",
+    "hash": "0x65d68188c067d27ad50c4f97366ab592fed5fe3c764638ddaa380e7dc5108355",
+    "r": "0x78ecc4de808d391e4785a81f958611b316c4c41ab41b78e3d888ac834050d4cc",
+    "s": "0xd1d08b0740c4f268da2b013a899e91578f1f3d8ba1215bd49e9a2ae2aa194e7",
+    "to": null
+  },
+  "receipt": {
+    "index": 0,
+    "epochNumber": 7836,
+    "outcomeStatus": 0,
+    "gasUsed": "522808",
+    "gasFee": "75000000",
+    "blockHash": "0x99924585310e95f45c57641ec4abeb9cbb9b5a301d6bdfeb61bcd7a9a0aec086",
+    "contractCreated": "0x8e9a0765ea1f77aac9bf435d02187190432a20ee",
+    "from": "0x127b10d9ec6f4c74915068d3372924e54fa705cd",
+    "logs": [],
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "stateRoot": "0xf29c3a40f127f944fbb14661df9a17054e3f576b02446126e9f2d23df38afe50",
+    "to": null,
+    "transactionHash": "0x65d68188c067d27ad50c4f97366ab592fed5fe3c764638ddaa380e7dc5108355"
+  },
+  "abi": [
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor",
+      "name": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_winner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "AnnounceWinner",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "manager",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "players",
+      "outputs": [
+        {
+          "internalType": "address payable",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "enter",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "pickWinner",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getPlayers",
+      "outputs": [
+        {
+          "internalType": "address payable[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getPool",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+}

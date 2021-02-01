@@ -1,0 +1,21 @@
+Note
+https://medium.com/coinmonks/5-minute-guide-to-deploying-smart-contracts-with-truffle-and-ropsten-b3e30d5ee1e
+npm install truffle
+truffle init
+npm install --save truffle-hdwallet-provider
+npm install --save dotenv
+npm install @studydefi/money-legos
+.env: 
+INFURA_URL_KOVAN=https://kovan.infura.io/v3/xxxxxx
+PRIVATE_KEY=xxxxx
+
+truffle deploy --network kovan
+
+
+
+transaction hash:    0xc2caa3245f1b8c349460dfbb9ff29b37437bdee525911cf5488103c3834003b4
+   > Blocks: 2            Seconds: 13
+   > contract address:    0x4feD0535ed6eB7782047Aa63c94602AC08eBd190
+   > block number:        22211812
+   > block timestamp:     1605966360
+   manager account:             0xb4F063AffD0C60ef3328273bCac6A6DCaa678dCA
