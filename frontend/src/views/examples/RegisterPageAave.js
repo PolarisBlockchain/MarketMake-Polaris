@@ -501,6 +501,7 @@ class RegisterPageAave extends React.Component {
             <div className="content">
               <Container>
                 <Row>
+                <Col className="offset-lg-0" lg="1" md="6">
                   <Dropdown 
                     isOpen={this.state.dropdownOpen} 
                     toggle={() => {this.setState({dropdownOpen: !this.state.dropdownOpen})}}
@@ -516,6 +517,7 @@ class RegisterPageAave extends React.Component {
                       <DropdownItem tag="a" href="/app/aave">Aave</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
+                  </Col>
                 </Row>
               </Container>
               <Container>

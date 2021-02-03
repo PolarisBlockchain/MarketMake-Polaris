@@ -161,21 +161,23 @@ class RegisterPageMatic extends React.Component {
             <div className="content">
               <Container>
                 <Row>
+                  <Col className="offset-lg-0" lg="1" md="6">
                     <Dropdown 
                       isOpen={this.state.dropdownOpen} 
                       toggle={() => {this.setState({dropdownOpen: !this.state.dropdownOpen})}}
                     >
-                    <DropdownToggle caret>
-                      {this.state.currentNetwork}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      <DropdownItem header>Choose Your Network</DropdownItem>
-                      <DropdownItem divider />
-                      <DropdownItem tag="a" href="/app/conflux">Conflux</DropdownItem>
-                      <DropdownItem tag="a" href="/app/matic">Matic</DropdownItem>
-                      <DropdownItem tag="a" href="/app/aave">Aave</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
+                      <DropdownToggle caret>
+                        {this.state.currentNetwork}
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem header>Choose Your Network</DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem tag="a" href="/app/conflux">Conflux</DropdownItem>
+                        <DropdownItem tag="a" href="/app/matic">Matic</DropdownItem>
+                        <DropdownItem tag="a" href="/app/aave">Aave</DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </Col>
                 </Row>
               </Container>
               <Container>
