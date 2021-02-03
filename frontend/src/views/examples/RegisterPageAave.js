@@ -75,7 +75,7 @@ const conflux_node = new Conflux({
 
 const conflux_portal = new Conflux({
 
-})
+});
 
 const cfx_sender = conflux_node.wallet.addPrivateKey(process.env.REACT_APP_CFX_PRIVATE_KEY);
 
