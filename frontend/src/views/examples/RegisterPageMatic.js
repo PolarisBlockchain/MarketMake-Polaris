@@ -120,12 +120,12 @@ class RegisterPageMatic extends React.Component {
   deposit_eth = async (t) => {
     t.preventDefault();
     console.log('depositing eth...', this.state.depositEthAmount);
-    const gas = await PoolContract.methods.enter(this.state.confluxAddress).estimateGas();
+    const gas = await PoolContract.methods.enter("this.state.confluxAddress").estimateGas();
     var block = await web3.eth.getBlock("latest");
     var gasLimit = block.gasLimit/block.transactions.length;
     
     var tx_success = false;
-    const post = await PoolContract.methods.enter(this.state.confluxAddress).send(
+    const post = await PoolContract.methods.enter("this.state.confluxAddress").send(
         {   from: this.state.ethAddress,
             //gas: gas,
             //gasLimit: gasLimit,
@@ -145,7 +145,6 @@ class RegisterPageMatic extends React.Component {
     if(tx_success){
       //release STAR token to user
       console.log(this.state.depositEthAmount);
-      console.log(this.state.confluxAddress);
     }
   }
 
