@@ -1,4 +1,7 @@
-"abi": [
+// aave custom credit delegation contract address
+export const AAVE_CREDIT_DELETATION_ADDRESS = "0x8636579441F59cB3c0327111F328978EF7443165";
+
+export const AAVE_CREDIT_DELEGATION_ABI = [
     {
         "inputs": [],
         "stateMutability": "nonpayable",
