@@ -25,6 +25,17 @@ contract CreditDelegation {
     }
 
     /**
+     * Check delegated.
+     * @param delegator The delegator's address
+     * @param delegatee The delegatee's address
+     */
+    function checkDelegated(address delegator, address delegatee) public returns(uint256){
+        (, address stableDebtTokenAddress,) = dataProvider.getReserveTokensAddresses(asset);
+        uint256 stableAllowance = IDebtToken(stableDebtTokenAddress).borrowAllowance(delegator, delegatee);
+        return stableAllowance;
+    }
+
+    /**
      * Deposits collateral into the Aave, to enable credit delegation
      * This would be called by the delegator.
      * @param asset The asset to be deposited as collateral
