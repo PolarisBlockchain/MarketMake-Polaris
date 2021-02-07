@@ -1,4 +1,4 @@
-# MarketMake-Polaris
+# Polaris Blockchain Games
 <img src="./imgs/coverpic.PNG" width="500">
 A decentralized, transparent, fair gaming platform utilizing Matic Layer 2 solutions to lower the extreme high gas fee on ETH, provide quick and affordable gaming experience. It also offer borrowing options using Aave’s Credit Delegation to allow users borrow tokens from friends to play the game and return them after winning.
 
