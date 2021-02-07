@@ -57,6 +57,7 @@ class RegisterPageAave extends React.Component {
     squares7and8: "",
     ethAddress: "",
     depositEthAmount: 0,
+    amountOfColateral: 0,
     dropdownOpen: false,
     currentNetwork: "Aave"
   };
@@ -185,13 +186,15 @@ class RegisterPageAave extends React.Component {
                           alt="..."
                           src={require("assets/img/square-purple-1.png")}
                         />
-                        <CardTitle tag="h4">Lenders</CardTitle>
+                        <CardTitle tag="h4">lenders</CardTitle>
                       </CardHeader>
                       <CardBody>
                         <p>First connect your ETH Wallet!</p>
                         <br/>
                         <MetaMaskButton onClick={this.connect_metamask}>Connect with MetaMask</MetaMaskButton>
+                        <p></p>
                         <p>ethereum address: {this.state.ethAddress}</p>
+                        <p>amount deposited: {this.state.amountOfColateral} ETH</p>
                         
                         <Form className="form" onSubmit={this.deposit_eth}>
                           <label>
@@ -240,7 +243,7 @@ class RegisterPageAave extends React.Component {
                               </InputGroupAddon>
                               <Input
                                 onChange={(t) => this.setState({depositEthAmount: t.target.value})}
-                                placeholder="amount in matic"
+                                placeholder="amount in eth"
                                 type="text"
                                 onFocus={e =>
                                   this.setState({ passwordFocus: true })
@@ -257,15 +260,186 @@ class RegisterPageAave extends React.Component {
                           
                         </Form>
                       </CardBody>
-                      {/* <CardFooter>
-                          <Row>
-                            <pre>   You own *{this.state.star_token_amount}* STAR tokens!!  </pre>
+                    </Card>
+                  </Col>
+                </Row>
+                <div name="background-cards">
+                  <div className="register-bg" />
+                  <div
+                    className="square square-1"
+                    id="square1"
+                    style={{ transform: this.state.squares1to6}}
+                  />
+                  <div
+                    className="square square-2"
+                    id="square2"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                  <div
+                    className="square square-3"
+                    id="square3"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                  <div
+                    className="square square-4"
+                    id="square4"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                  <div
+                    className="square square-5"
+                    id="square5"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                  <div
+                    className="square square-6"
+                    id="square6"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                </div>
+              </Container>
+          </div>
+            
+          </div>
+          <div className="page-header">
+            <div className="page-header-image" />
+            <div className="content">
+              <Container>
+                <Row>
+                  <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
+                    <div name="background-squares">
+                      <div
+                        className="square square-7"
+                        id="square7"
+                        style={{ transform: this.state.squares7and8 }}
+                      />
+                      <div
+                        className="square square-8"
+                        id="square8"
+                        style={{ transform: this.state.squares7and8 }}
+                      />
+                    </div>
+                    <Card className="card-register">
+                      <CardHeader>
+                        <CardImg
+                          alt="..."
+                          src={require("assets/img/square-purple-1.png")}
+                        />
+                        <CardTitle tag="h4">delegate</CardTitle>
+                      </CardHeader>
+                      <CardBody>
+
+                        <h3>To Delegate (Delegator Only):</h3>
+
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
                             
-                            <Button className="btn-round right" size="sm" onClick={()=> this.checkStarBalance()}>
-                              refresh
-                            </Button>
-                          </Row>
-                      </CardFooter> */}
+                            The Delegatee's Address
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="address of borrower"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                            </InputGroup>
+                          </label>
+                        </Form>
+
+
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
+                            Amount to delegate
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="amount in eth"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                            </InputGroup>
+                          </label>
+                          
+                        </Form>
+                        <Button className="btn-round" size="sm">
+                                confirm
+                        </Button>
+                        <p/>
+
+                        <h3>Check Delegated:</h3>
+                        
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
+                            The Delegator's Address
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="address of delegator"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                            </InputGroup>
+                          </label>
+                        </Form>
+
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
+                            The Delegatee's Address
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="address of delegatee"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                            </InputGroup>
+                          </label>
+                        </Form>
+                        <Button className="btn-round" size="sm">
+                                confirm
+                              </Button>
+                        
+                              <p>Allowance: {this.state.amountOfColateral} ETH</p>
+
+                      </CardBody>
                     </Card>
                   </Col>
                 </Row>
@@ -305,6 +479,133 @@ class RegisterPageAave extends React.Component {
               </Container>
             </div>
           </div>
+          
+          
+          <div className="page-header">
+            <div className="page-header-image" />
+            <div className="content">
+              <Container>
+                <Row>
+                  <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
+                    <div name="background-squares">
+                      <div
+                        className="square square-7"
+                        id="square7"
+                        style={{ transform: this.state.squares7and8 }}
+                      />
+                      <div
+                        className="square square-8"
+                        id="square8"
+                        style={{ transform: this.state.squares7and8 }}
+                      />
+                    </div>
+                    <Card className="card-register">
+                      <CardHeader>
+                        <CardImg
+                          alt="..."
+                          src={require("assets/img/square-purple-1.png")}
+                        />
+                        <CardTitle tag="h4">borrow</CardTitle>
+                      </CardHeader>
+                      <CardBody>
+
+                      <p>Your Borrow request should be less than the Amount Below</p>
+                      <p>Allowance: {this.state.amountOfColateral} ETH</p>
+
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
+                            Amount to Borrow
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="amount in eth"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                            </InputGroup>
+                          </label>
+                          
+                        </Form>
+
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
+                            The Delegator's Address
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="address of delegator"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                            </InputGroup>
+                          </label>
+                        </Form>
+
+                        <Button className="btn-round" size="sm">
+                                confirm
+                        </Button>
+
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+                <div name="background-cards">
+                  <div className="register-bg" />
+                  <div
+                    className="square square-1"
+                    id="square1"
+                    style={{ transform: this.state.squares1to6}}
+                  />
+                  <div
+                    className="square square-2"
+                    id="square2"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                  <div
+                    className="square square-3"
+                    id="square3"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                  <div
+                    className="square square-4"
+                    id="square4"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                  <div
+                    className="square square-5"
+                    id="square5"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                  <div
+                    className="square square-6"
+                    id="square6"
+                    style={{ transform: this.state.squares1to6 }}
+                  />
+                </div>
+              </Container>
+            </div>
+          </div>
+          
+
           <Footer />
         </div>
       </div>
