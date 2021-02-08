@@ -21,12 +21,7 @@ import Web3 from "web3";
 import { Conflux } from 'js-conflux-sdk';
 import Matic from '@maticnetwork/maticjs'
 import { 
-  ETH_Pool_Address, ETH_Pool_ABI,
-  StarsCoins_Address, StarsCoins_ABI,
-  Lottery_Address, Lottery_ABI,
-  BinaryLottery_Address, BinaryLottery_ABI,
-  LotteryFactory_Address, LotteryFactory_ABI,
-  Disclaimer
+  MATIC_ADDRESS, MATIC_ABI
 } from '../abi/abi'
 
 
@@ -63,7 +58,16 @@ import Footer from "components/Footer/Footer.js";
 
 
 const web3 = new Web3(Web3.givenProvider);
-const PoolContract = new web3.eth.Contract(ETH_Pool_ABI, ETH_Pool_Address);
+const matic = new Matic({
+  maticProvider: "https://rpc-mumbai.matic.today",
+  parentProvider: "https://goerli.infura.io/v3/75aa7935112647bc8cc49d20beafa189",
+  rootChain: "0x2890bA17EfE978480615e330ecB65333b880928e",
+  withdrawManager: "0x2923C8dD6Cdf6b2507ef91de74F1d5E0F11Eac53",
+  depositManager: "0x7850ec290A2e2F40B82Ed962eaf30591bb5f5C96",
+  registry: "0xeE11713Fe713b2BfF2942452517483654078154D",
+})
+
+const RPSContract = new web3.eth.Contract(MATIC_ABI, MATIC_ADDRESS);
 
 
 
@@ -74,7 +78,8 @@ class RegisterPageMatic extends React.Component {
     ethAddress: "",
     depositEthAmount: 0,
     dropdownOpen: false,
-    currentNetwork: "Matic",
+    currentNetwork: "Eth/Matic",
+    rps_selected: 2,
   };
 
   componentDidMount() {
@@ -118,34 +123,38 @@ class RegisterPageMatic extends React.Component {
   }
 
   deposit_eth = async (t) => {
-    t.preventDefault();
-    console.log('depositing eth...', this.state.depositEthAmount);
-    const gas = await PoolContract.methods.enter("this.state.confluxAddress").estimateGas();
-    var block = await web3.eth.getBlock("latest");
-    var gasLimit = block.gasLimit/block.transactions.length;
-    
-    var tx_success = false;
-    const post = await PoolContract.methods.enter("this.state.confluxAddress").send(
-        {   from: this.state.ethAddress,
-            //gas: gas,
-            //gasLimit: gasLimit,
-            value: web3.utils.toWei(this.state.depositEthAmount, "ether"),
-        }, 
-        function (err, res) {
-            if (err) {
-                console.log("An error occured", err)
-                return
-            }
-            tx_success = true;
-            console.log("success!!!!");
-            console.log("Hash of the transaction: " + res)
-        }
-    );
+    t.preventDefault()
+    console.log("getting test token");
 
-    if(tx_success){
-      //release STAR token to user
-      console.log(this.state.depositEthAmount);
-    }
+    const token = "0x3f152B63Ec5CA5831061B2DccFb29a874C317502" // ERC20 token address
+    const amount = '100000000000000000' // amount in wei
+    await matic.initialize()
+    //matic.setWallet("private key here")
+    const from = this.state.ethAddress
+    // Approve Deposit Manager contract to transfer tokens
+    await matic.approveERC20TokensForDeposit(token, amount, { from, gasPrice: '10000000000' })
+    // Deposit tokens
+    await matic.depositERC20ForUser(token, from, amount, { from, gasPrice: '10000000000' })
+  }
+
+  play_game = async () => {
+    var tx_success = false;
+    const post = await RPSContract.methods.play(this.state.rps_selected).send(
+      {   from: this.state.ethAddress,
+          value: web3.utils.toWei("10", "ether"),
+      }, 
+      function (err, res) {
+          if (err) {
+              console.log("An error occured", err)
+              return
+          }
+          tx_success = true;
+          console.log("success!!!!");
+          console.log("Hash of the transaction: " + res)
+      }
+    );
+      
+
   }
 
   
@@ -171,14 +180,204 @@ class RegisterPageMatic extends React.Component {
                       <DropdownMenu>
                         <DropdownItem header>Choose Your Network</DropdownItem>
                         <DropdownItem divider />
-                        <DropdownItem tag="a" href="/app/conflux">Conflux</DropdownItem>
-                        <DropdownItem tag="a" href="/app/matic">Matic</DropdownItem>
+                        <DropdownItem tag="a" href="/app/matic">Eth/Matic</DropdownItem>
                         <DropdownItem tag="a" href="/app/aave">Aave</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
                   </Col>
                 </Row>
               </Container>
+
+
+              {/* <Container>
+                <Row>
+                  <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
+                    <div
+                      className="square square-7"
+                      id="square7"
+                      style={{ transform: this.state.squares7and8 }}
+                    />
+                    <div
+                      className="square square-8"
+                      id="square8"
+                      style={{ transform: this.state.squares7and8 }}
+                    />
+                    <Card className="card-register">
+                      <CardHeader>
+                        <CardImg
+                          alt="..."
+                          src={require("assets/img/square-purple-1.png")}
+                        />
+                        <CardTitle tag="h4">*DEX</CardTitle>
+                      </CardHeader>
+                      <CardBody>
+                        <p>first connect to your wallet!</p>
+                        <p>ethereum address: {this.state.ethAddress}</p>
+                        <MetaMaskButton onClick={this.connect_metamask}>Connect with MetaMask</MetaMaskButton>
+                        
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
+                            Deposit ETH to get STAR Token on Ethereum
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              <InputGroupAddon addonType="prepend">
+                                <InputGroupText>
+                                  <i className="tim-icons icon-lock-circle" />
+                                </InputGroupText>
+                              </InputGroupAddon>
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="amount in eth"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                              <Button className="btn-round" size="sm">
+                                confirm
+                              </Button>
+                            </InputGroup>
+                          </label>
+                          
+                        </Form>
+
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
+                            Transfer STAR on Ethereum to STAR on Matic
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              <InputGroupAddon addonType="prepend">
+                                <InputGroupText>
+                                  <i className="tim-icons icon-lock-circle" />
+                                </InputGroupText>
+                              </InputGroupAddon>
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="amount in star"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                              <Button className="btn-round" size="sm">
+                                confirm
+                              </Button>
+                            </InputGroup>
+                          </label>
+                          
+                        </Form>
+
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
+                            Withdraw from STAR on Matic to get STAR on Ethereum
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              <InputGroupAddon addonType="prepend">
+                                <InputGroupText>
+                                  <i className="tim-icons icon-lock-circle" />
+                                </InputGroupText>
+                              </InputGroupAddon>
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="amount in matic"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                              <Button className="btn-round" size="sm">
+                                confirm
+                              </Button>
+                            </InputGroup>
+                          </label>
+                          
+                        </Form>
+
+                        <Form className="form" onSubmit={this.deposit_eth}>
+                          <label>
+                            Withdraw from STAR to ETH
+                            <InputGroup
+                              className={classnames({
+                                "input-group-focus": this.state.passwordFocus
+                              })}
+                            >
+                              <InputGroupAddon addonType="prepend">
+                                <InputGroupText>
+                                  <i className="tim-icons icon-lock-circle" />
+                                </InputGroupText>
+                              </InputGroupAddon>
+                              <Input
+                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
+                                placeholder="amount in matic"
+                                type="text"
+                                onFocus={e =>
+                                  this.setState({ passwordFocus: true })
+                                }
+                                onBlur={e =>
+                                  this.setState({ passwordFocus: false })
+                                }
+                              />
+                              <Button className="btn-round" size="sm">
+                                confirm
+                              </Button>
+                            </InputGroup>
+                          </label>
+                          
+                        </Form>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+                <div className="register-bg" />
+                <div
+                  className="square square-1"
+                  id="square1"
+                  style={{ transform: this.state.squares1to6}}
+                />
+                <div
+                  className="square square-2"
+                  id="square2"
+                  style={{ transform: this.state.squares1to6 }}
+                />
+                <div
+                  className="square square-3"
+                  id="square3"
+                  style={{ transform: this.state.squares1to6 }}
+                />
+                <div
+                  className="square square-4"
+                  id="square4"
+                  style={{ transform: this.state.squares1to6 }}
+                />
+                <div
+                  className="square square-5"
+                  id="square5"
+                  style={{ transform: this.state.squares1to6 }}
+                />
+                <div
+                  className="square square-6"
+                  id="square6"
+                  style={{ transform: this.state.squares1to6 }}
+                />
+              </Container> */}
               <Container>
                 <Row>
                   <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
@@ -201,78 +400,13 @@ class RegisterPageMatic extends React.Component {
                         <CardTitle tag="h4">*RPS</CardTitle>
                       </CardHeader>
                       <CardBody>
-                        <p>ethereum address: {this.state.ethAddress}</p>
+                        <p>Configure your Wallet to Matic!</p>
+                        <p>matic address: {this.state.ethAddress}</p>
                         <MetaMaskButton onClick={this.connect_metamask}>Connect with MetaMask</MetaMaskButton>
-                        
-                        <Form className="form" onSubmit={this.deposit_eth}>
-                          <label>
-                            Deposit
-                            <InputGroup
-                              className={classnames({
-                                "input-group-focus": this.state.passwordFocus
-                              })}
-                            >
-                              <InputGroupAddon addonType="prepend">
-                                <InputGroupText>
-                                  <i className="tim-icons icon-lock-circle" />
-                                </InputGroupText>
-                              </InputGroupAddon>
-                              <Input
-                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
-                                placeholder="amount in matic"
-                                type="text"
-                                onFocus={e =>
-                                  this.setState({ passwordFocus: true })
-                                }
-                                onBlur={e =>
-                                  this.setState({ passwordFocus: false })
-                                }
-                              />
-                              <Button className="btn-round" size="sm">
-                                confirm
-                              </Button>
-                            </InputGroup>
-                          </label>
-                          
-                        </Form>
-
-
-                        <Form className="form" onSubmit={this.deposit_eth}>
-                          <label>
-                            Withdraw
-                            <InputGroup
-                              className={classnames({
-                                "input-group-focus": this.state.passwordFocus
-                              })}
-                            >
-                              <InputGroupAddon addonType="prepend">
-                                <InputGroupText>
-                                  <i className="tim-icons icon-lock-circle" />
-                                </InputGroupText>
-                              </InputGroupAddon>
-                              <Input
-                                onChange={(t) => this.setState({depositEthAmount: t.target.value})}
-                                placeholder="amount in matic"
-                                type="text"
-                                onFocus={e =>
-                                  this.setState({ passwordFocus: true })
-                                }
-                                onBlur={e =>
-                                  this.setState({ passwordFocus: false })
-                                }
-                              />
-                              <Button className="btn-round" size="sm">
-                                confirm
-                              </Button>
-                            </InputGroup>
-                          </label>
-                          
-                        </Form>
-
                           <Col>
                               <p className="category">Make a choice:</p>
                               <FormGroup check className="form-check-radio">
-                                <Label check onClick={() => this.setState({nba_selected_team: 1})}>
+                                <Label check onClick={() => this.setState({rps_selected: 0})}>
                                   <Input
                                     defaultValue="option1"
                                     id="exampleRadios1"
@@ -284,7 +418,7 @@ class RegisterPageMatic extends React.Component {
                                 </Label>
                               </FormGroup>
                               <FormGroup check className="form-check-radio">
-                                <Label check onClick={() => this.setState({nba_selected_team: 2})}>
+                                <Label check onClick={() => this.setState({rps_selected: 1})}>
                                   <Input
                                     defaultChecked
                                     defaultValue="option2"
@@ -297,7 +431,8 @@ class RegisterPageMatic extends React.Component {
                                 </Label>
                               </FormGroup>
                               <FormGroup check className="form-check-radio">
-                                <Label check onClick={() => this.setState({nba_selected_team: 3})}>
+                                <Label check onClick={() => this.setState({rps_selected: 2
+                                })}>
                                   <Input
                                     defaultChecked
                                     defaultValue="option2"
@@ -311,7 +446,7 @@ class RegisterPageMatic extends React.Component {
                               </FormGroup>
                 
                               <br/>
-                              <Button className="btn-round right" size="sm" onClick={() => this.enter_nba_lottery()}>
+                              <Button className="btn-round right" size="sm" onClick={() => this.play_game()}>
                               enter lottery
                             </Button>
                           </Col>
@@ -351,8 +486,11 @@ class RegisterPageMatic extends React.Component {
                   style={{ transform: this.state.squares1to6 }}
                 />
               </Container>
+              
             </div>
           </div>
+
+         
            
           <Footer />
         </div>

@@ -156,8 +156,7 @@ class RegisterPageAave extends React.Component {
                         <DropdownMenu>
                           <DropdownItem header>Choose Your Network</DropdownItem>
                           <DropdownItem divider />
-                          <DropdownItem tag="a" href="/app/conflux">Conflux</DropdownItem>
-                          <DropdownItem tag="a" href="/app/matic">Matic</DropdownItem>
+                          <DropdownItem tag="a" href="/app/matic">Eth/Matic</DropdownItem>
                           <DropdownItem tag="a" href="/app/aave">Aave</DropdownItem>
                         </DropdownMenu>
                       </Dropdown>

@@ -37,8 +37,7 @@ class PageHeader extends React.Component {
             <h1 className="h1-seo">*Polaris</h1>
             <h3 className="d-none d-sm-block">
               a decentralized, transparent, fair, and <br /> 
-              diverse lottery platform on <br />
-              Conflux blockchain 
+              diverse blockchain lottery platform
             </h3>
           </div>
         </Container>

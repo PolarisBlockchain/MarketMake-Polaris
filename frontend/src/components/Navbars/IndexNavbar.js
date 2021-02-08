@@ -184,7 +184,7 @@ class ComponentsNavbar extends React.Component {
               <NavItem className="p-0">
                 <NavLink
                   data-placement="bottom"
-                  href="/app/conflux"
+                  href="/app/matic"
                   rel="noopener noreferrer"
                   target="_self"
                 >

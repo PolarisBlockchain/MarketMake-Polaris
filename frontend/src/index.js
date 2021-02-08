@@ -39,16 +39,16 @@ ReactDOM.render(
         render={props => <LandingPage {...props} />}
       />
       <Route
-        path="/app/conflux"
-        render={props => <RegisterPageConflux {...props} />}
-      />
-      <Route
         path="/app/matic"
         render={props => <RegisterPageMatic {...props} />}
       />
       <Route
         path="/app/aave"
         render={props => <RegisterPageAave {...props} />}
+      />
+      <Route
+        path="/app/conflux"
+        render={props => <RegisterPageConflux {...props} />}
       />
       <Route
         path="/about-us"
